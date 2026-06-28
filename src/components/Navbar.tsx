@@ -39,7 +39,7 @@ export default function Navbar() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="font-display text-2xl sm:text-3xl tracking-tighter text-white bg-black px-3.5 py-1 rounded-lg border-2 border-black shadow-solid-terracotta hover:scale-105 transition-all duration-200 cursor-pointer uppercase"
         >
-          ANIRBAAN
+          BAAAANNN
         </button>
 
         {/* Center Links */}
