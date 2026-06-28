@@ -12,66 +12,70 @@ import AnalogSynth from './AnalogSynth';
 const CURATED_FRAMES: PhotoFrame[] = [
   {
     id: 'frame-1',
-    title: 'A man sitting on a wooden bench',
-    subtitle: 'Kolkata, West Bengal, India',
+    title: 'Arachnid Alert',
+    subtitle: 'Wall Crawler',
     url: 'https://images.unsplash.com/photo-1714631062530-4125f1015137?q=80&w=800&auto=format&fit=crop',
-    views: '112,400+',
-    downloads: '1,120+',
-    location: 'Kolkata, India',
-    camera: 'Street Photography',
+    views: '500+',
+    downloads: '40+',
+    location: 'Inside Your Nightmares, India',
+    camera: 'Spooky Snaps',
     settings: 'Available on Unsplash',
-    description: 'A nostalgic black and white street capture of an elderly man resting on a roadside bench under the historic streetscapes of Kolkata.',
-    unsplashUrl: 'https://unsplash.com/photos/pk2EQOo1pys'
-  },
-  {
-    id: 'frame-2',
-    title: 'Street silhouette in motion',
-    subtitle: 'Kolkata, West Bengal, India',
-    url: 'https://images.unsplash.com/photo-1694444778778-65f5d412899f?q=80&w=800&auto=format&fit=crop',
-    views: '45,800+',
-    downloads: '410+',
-    location: 'Kolkata, India',
-    camera: 'Street Photography',
-    settings: 'Available on Unsplash',
-    description: 'A candid motion-blur street photo capturing a hurried pedestrian crossing the busy roads of Kolkata.',
-    unsplashUrl: 'https://unsplash.com/photos/6VQLWVs9qY8'
-  },
-  {
-    id: 'frame-3',
-    title: 'Companionship on the streets',
-    subtitle: 'Old City, Hyderabad, India',
-    url: 'https://images.unsplash.com/photo-1706900961630-33ca9d775443?q=80&w=800&auto=format&fit=crop',
-    views: '38,900+',
-    downloads: '290+',
-    location: 'Hyderabad, India',
-    camera: 'Street Photography',
-    settings: 'Available on Unsplash',
-    description: 'A gentle morning shot of a man and a friendly street dog resting beside each other on a public bench in Hyderabad.',
+    description: 'Spotted a leggy little wall-dweller chilling by the door. Just your casual, multi-legged roommate doing its thing',
     unsplashUrl: 'https://unsplash.com/photos/9M-Y580a7wE'
   },
   {
-    id: 'frame-4',
-    title: 'Monsoon night bokeh',
-    subtitle: 'Rainy city streets of Hyderabad',
-    url: 'https://images.unsplash.com/photo-1721498033318-0701c5c00bcf?q=80&w=800&auto=format&fit=crop',
-    views: '45,836+',
-    downloads: '430+',
-    location: 'Hyderabad, India',
-    camera: 'Street Photography',
+    id: 'frame-2',
+    title: 'SUNSET ON A STEM',
+    subtitle: 'Neon Nature',
+    url: 'https://images.unsplash.com/photo-1694444778778-65f5d412899f?q=80&w=800&auto=format&fit=crop',
+    views: '650+',
+    downloads: '39+',
+    location: 'Secret gadern',
+    camera: 'Moody Botanicals',
     settings: 'Available on Unsplash',
-    description: 'A beautiful atmospheric capture of glowing street lights and wet city reflections during a rainy evening in Hyderabad.'
+    description: 'This tiny flower is flexing some serious orange and red gradients to outshine the absolute darkness around it.',
+    unsplashUrl: 'https://unsplash.com/photos/Ti7Fyz5kxf8'
+  },
+  {
+    id: 'frame-3',
+    title: 'THE POCKET SHIP',
+    subtitle: 'The Micro Voyager',
+    url: 'https://images.unsplash.com/photo-1706900961630-33ca9d775443?q=80&w=800&auto=format&fit=crop',
+    views: '33,444+',
+    downloads: '216+',
+    location: 'Sector 7, Kitchen Table',
+    camera: 'The box of treasure',
+    settings: 'Available on Unsplash',
+    description: 'A sleek teal and black mini cruiser ready to warp through your living room at the speed of imagination.',
+    unsplashUrl: 'https://unsplash.com/photos/a-toy-car-sitting-on-top-of-a-wooden-table-tgz8Eo9qU0w'
+  },
+  {
+    id: 'frame-4',
+    title: 'THE LONELY GLOW-UP',
+    subtitle: 'Solo spark',
+    url: 'https://images.unsplash.com/photo-1721498033318-0701c5c00bcf?q=80&w=800&auto=format&fit=crop',
+    views: '440+',
+    downloads: '52+',
+    location: 'The Void, Universe',
+    camera: 'The flamey flame',
+    settings: 'Available on Unsplash',
+    description: 'One tiny candle absolutely carrying the team against an entire room full of pure, unadulterated darkness.',
+    unsplashUrl: 'https://unsplash.com/photos/6VQLWVs9qY8'
+
   },
   {
     id: 'frame-5',
-    title: 'Daily life near Charminar',
-    subtitle: 'Bustling bazaar, Hyderabad',
+    title: 'THE LONELY PLANT',
+    subtitle: 'Spark of joy',
     url: 'https://images.unsplash.com/photo-1745362803735-a32f4998c112?q=80&w=800&auto=format&fit=crop',
-    views: '95,430+',
-    downloads: '880+',
-    location: 'Hyderabad, India',
-    camera: 'Street Photography',
+    views: '172+',
+    downloads: '20+',
+    location: 'Procrastination Station, Bedroom',
+    camera: 'The white in black',
     settings: 'Available on Unsplash',
-    description: 'A beautiful candid frame of street vendors, passing auto-rickshaws, and daily choreography near Hyderabad\'s historic Charminar.'
+    description: 'A single lamp fighting for its life to illuminate a desk, a plant, and someone\'s unfinished homework assignments.',
+    unsplashUrl: 'https://unsplash.com/photos/z2Qs7ipL6pc'
+
   }
 ];
 
@@ -147,7 +151,7 @@ export default function PhotoFrames() {
                 </h2>
               </div>
               <p className="font-mono text-xs font-bold tracking-widest text-deep-rose">
-                242,936+ VIEWS | 2,250+ DOWNLOADS
+                242,936+ VIEWS | 2,250+ DOWNLOADS | Dont matter tho....
               </p>
             </div>
 
@@ -333,13 +337,19 @@ export default function PhotoFrames() {
 
                 {/* Footer Buttons / Downloads */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <button
+                
+
+                { /*  <button
                     onClick={() => triggerDownload(activeFrame.id)}
                     className="w-full py-3 bg-saffron text-black font-sans font-black text-xs uppercase tracking-wider border-2 border-black rounded-xl hover:bg-turmeric transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
                   >
                     <Download className="w-4 h-4" />
                     {downloadSuccess === activeFrame.id ? 'Saved with Pride!' : 'Download Frame (High Res)'}
-                  </button>
+          
+
+
+
+                </button>    */} 
 
                   <a
                     href={activeFrame.unsplashUrl || "https://unsplash.com/@baanbhaba"}

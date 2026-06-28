@@ -178,7 +178,7 @@ export default function AboutSection() {
 
             {/* Description Copy */}
             <p className="font-sans text-base md:text-lg leading-relaxed text-on-surface mb-6 font-medium">
-              I'm Anirbaan. I tinker with configs because it feels good. I shoot photos because the world is beautiful. This is my little corner of the internet—warm, messy, and mine.
+            I'm Anirbaan. I tinker with configs because it scratches my brain right. I shoot photos because details are worth remembering. Welcome to my corner of the internet — chaotic & messy yet comfy.
             </p>
           </div>
 

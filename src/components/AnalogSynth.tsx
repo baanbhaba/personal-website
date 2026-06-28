@@ -37,28 +37,28 @@ const ARTISTS: ArtistConfig[] = [
       {
         title: 'To Pimp a Butterfly',
         year: '2015',
-        url: 'https://music.apple.com/us/album/to-pimp-a-butterfly/974187289',
+        url: 'https://music.apple.com/in/album/to-pimp-a-butterfly/974187289',
         coverDescription: 'A monumental milestone of conscious rap, jazz fusion, and spoken word poetry.',
         badge: 'MASTERPIECE'
       },
       {
         title: 'Mr. Morale & The Big Steppers',
         year: '2022',
-        url: 'https://music.apple.com/us/album/mr-morale-the-big-steppers/1623854804',
+        url: 'https://music.apple.com/in/album/mr-morale-the-big-steppers/1623854804',
         coverDescription: 'A raw, introspective double-album masterpiece.',
         badge: 'RAW'
       },
       {
         title: 'DAMN.',
         year: '2017',
-        url: 'https://music.apple.com/us/album/damn/1440860105',
+        url: 'https://music.apple.com/in/album/damn/1440860105',
         coverDescription: 'Pulitzer Prize-winning sonic perfection.',
         badge: 'CLASSIC'
       },
       {
         title: 'good kid, m.A.A.d city',
         year: '2012',
-        url: 'https://music.apple.com/us/album/good-kid-m-a-a-d-city-deluxe-version/1440818890',
+        url: 'https://music.apple.com/in/album/good-kid-m-a-a-d-city-deluxe-version/1440818890',
         coverDescription: 'A cinematic street novel in musical form.',
         badge: 'ESSENTIAL'
       }
@@ -75,14 +75,14 @@ const ARTISTS: ArtistConfig[] = [
       {
         title: 'Blonde',
         year: '2016',
-        url: 'https://music.apple.com/us/album/blonde/1146195596',
+        url: 'https://music.apple.com/in/album/blonde/1146195596',
         coverDescription: 'A sweeping, avant-garde collage of memory, guitar, and vocal pitches.',
         badge: 'MASTERPIECE'
       },
       {
         title: 'Channel Orange',
         year: '2012',
-        url: 'https://music.apple.com/us/album/channel-orange/1441474453',
+        url: 'https://music.apple.com/in/album/channel-orange/1441474453',
         coverDescription: 'A vivid, sunny-yet-melancholic exploration of youth and heartbreak.',
         badge: 'CLASSIC'
       }
@@ -99,28 +99,28 @@ const ARTISTS: ArtistConfig[] = [
       {
         title: 'My Beautiful Dark Twisted Fantasy',
         year: '2010',
-        url: 'https://music.apple.com/us/album/my-beautiful-dark-twisted-fantasy/1440742903',
+        url: 'https://music.apple.com/in/album/my-beautiful-dark-twisted-fantasy/1440742903',
         coverDescription: 'Maximalist orchestration and unmatched grandeur.',
         badge: 'PERFECTION'
       },
       {
         title: 'Yeezus',
         year: '2013',
-        url: 'https://music.apple.com/us/album/yeezus/1440871676',
+        url: 'https://music.apple.com/in/album/yeezus/1440871676',
         coverDescription: 'A minimalist, abrasive industrial punk-rap roar.',
         badge: 'EXPERIMENTAL'
       },
       {
         title: 'Graduation',
         year: '2007',
-        url: 'https://music.apple.com/us/album/graduation/1440824011',
+        url: 'https://music.apple.com/in/album/graduation/1440824011',
         coverDescription: 'Electronic-infused stadium-sized anthems.',
         badge: 'ICONIC'
       },
       {
         title: 'The College Dropout',
         year: '2004',
-        url: 'https://music.apple.com/us/album/the-college-dropout/1441151613',
+        url: 'https://music.apple.com/in/album/the-college-dropout/1441151613',
         coverDescription: 'Warm, chipmunk-soul-fueled classic hip-hop debut.',
         badge: 'DEBUT CLASSIC'
       }
@@ -137,21 +137,21 @@ const ARTISTS: ArtistConfig[] = [
       {
         title: 'Actual Life 3',
         year: '2022',
-        url: 'https://music.apple.com/us/album/actual-life-3-january-1-september-9-2022/1641885669',
+        url: 'https://music.apple.com/in/album/actual-life-3-january-1-september-9-2022/1641885669',
         coverDescription: 'Euphoric dance records stitched from raw memory fragments.',
         badge: 'ESSENTIAL'
       },
       {
         title: 'Actual Life 2',
         year: '2021',
-        url: 'https://music.apple.com/us/album/actual-life-2-november-5-2021-january-15-2022/1590740924',
+        url: 'https://music.apple.com/in/album/actual-life-2-november-5-2021-january-15-2022/1590740924',
         coverDescription: 'A gorgeous exploration of hope, friendship, and grief.',
         badge: 'DEEP CHILL'
       },
       {
         title: 'Actual Life 1',
         year: '2021',
-        url: 'https://music.apple.com/us/album/actual-life-april-14-december-17-2020/1557262459',
+        url: 'https://music.apple.com/in/album/actual-life-april-14-december-17-2020/1557262459',
         coverDescription: 'The revolutionary pandemic-era diaristic record.',
         badge: 'DEBUT'
       }

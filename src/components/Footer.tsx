@@ -40,14 +40,7 @@ export default function Footer() {
             <Instagram className="w-3.5 h-3.5" />
             Instagram
           </a>
-          <a
-            href="/rss.xml"
-            className="flex items-center gap-1.5 font-sans font-bold text-xs tracking-wider text-terracotta hover:text-deep-rose transition-colors"
-          >
-            <Rss className="w-3.5 h-3.5" />
-            RSS
-          </a>
-          <a
+                    <a
             href="https://github.com/baanbhaba/personal-website"
             target="_blank"
             rel="noreferrer"

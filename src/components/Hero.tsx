@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-
+import me from './me.png';
 import React from 'react';
 import { motion } from 'motion/react';
 import { Compass, Sparkles, MapPin } from 'lucide-react';
@@ -57,7 +57,7 @@ export default function Hero() {
             </h1>
             
             <p className="font-serif italic text-2xl md:text-3xl text-deep-rose tracking-wide">
-              A simple kid who hobbies Arch and Hyprland.
+              A guy who hobbies Arch and Hyprland.
             </p>
             
             <div className="flex items-center gap-3 pt-2 text-on-surface">
@@ -89,97 +89,13 @@ export default function Hero() {
           whileHover={{ scale: 1.05, rotate: -1, transition: { duration: 0.3 } }}
           className="relative w-72 h-72 md:w-96 md:h-96 flex-shrink-0 cursor-pointer bg-[#31161C] p-6 rounded-2xl shadow-solid-rose border-4 border-terracotta overflow-hidden"
         >
-          {/* Inner illustration: Silhouette under Jaipur Archway */}
-          <div className="relative w-full h-full bg-[#E65C00] rounded-xl flex items-center justify-center overflow-hidden border border-terracotta/40">
-            {/* Sun Rays/Atmosphere */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#B33600] via-[#E65C00] to-[#FF9933] opacity-90" />
-            
-            {/* Geometric Arch Design (SVG) */}
-            <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full text-[#4D0012] fill-current">
-              {/* Outer arch shape */}
-              <path d="M 20 200 
-                       L 20 80 
-                       A 80 80 0 0 1 180 80 
-                       L 180 200 Z" 
-                    className="opacity-20" />
-              
-              {/* Palace windows/arches details */}
-              <path d="M 40 200 L 40 100 Q 100 20 160 100 L 160 200 Z" fill="none" stroke="#E65C00" strokeWidth="2" className="opacity-40" />
-              <path d="M 60 200 L 60 120 Q 100 40 140 120 L 140 200 Z" fill="none" stroke="#FF9933" strokeWidth="1.5" className="opacity-50" />
-              
-              {/* Traditional Jaipur arches pattern (Multiple decorative scalloped archways) */}
-              <path d="M 30 200 L 30 110 
-                       Q 45 90 60 110 
-                       Q 75 90 90 110 
-                       Q 105 90 120 110 
-                       Q 135 90 150 110 
-                       Q 165 90 170 110 
-                       L 170 200 Z" 
-                    fill="#1A000A" />
-
-              {/* Central high-scalloped arch silhouette */}
-              <path d="M 70 200 
-                       L 70 130 
-                       C 70 120, 80 110, 85 110
-                       C 90 110, 95 100, 100 100
-                       C 105 100, 110 110, 115 110
-                       C 120 110, 130 120, 130 130
-                       L 130 200 Z" 
-                    fill="#F2913D" />
-
-              {/* Scalloped decorative border detail inside the inner arch */}
-              <path d="M 72 200 
-                       L 72 132 
-                       C 72 122, 81 113, 85 113
-                       C 89 113, 94 103, 100 103
-                       C 106 103, 111 113, 115 113
-                       C 119 113, 128 122, 128 132
-                       L 128 200 Z" 
-                    fill="#1A000A" />
-
-              {/* Silhouette of Anirbaan Haldar standing in traditional kurta */}
-              <g transform="translate(100, 140) scale(0.35)">
-                {/* Head / Turban */}
-                <ellipse cx="0" cy="-90" rx="14" ry="12" fill="#FFA347" />
-                {/* Turban folds */}
-                <path d="M -16 -92 C -10 -105, 10 -105, 16 -92 Z" fill="#FFA347" />
-                {/* Face silhouette */}
-                <ellipse cx="0" cy="-78" rx="11" ry="12" fill="#FFA347" />
-                <path d="M -11 -76 L -16 -76 L -11 -72 Z" fill="#FFA347" /> {/* Beard profile */}
-                
-                {/* Neck */}
-                <rect x="-4" y="-68" width="8" height="10" fill="#FFA347" />
-                
-                {/* Kurta Body / Torso */}
-                <path d="M -22 -58 
-                         L 22 -58 
-                         L 28 60 
-                         L -28 60 Z" 
-                      fill="#FFA347" />
-                
-                {/* Kurta Flaps / Long shirt bottom */}
-                <path d="M -28 60 
-                         L 28 60 
-                         L 32 160 
-                         L -32 160 Z" 
-                      fill="#FFA347" />
-                
-                {/* Sleeves / Arms */}
-                <path d="M -22 -58 L -38 -15 L -34 -10 L -22 -44" fill="#FFA347" />
-                <path d="M 22 -58 L 38 -15 L 34 -10 L 22 -44" fill="#FFA347" />
-                
-                {/* Legs / Pajama */}
-                <rect x="-14" y="160" width="10" height="40" fill="#FFA347" />
-                <rect x="4" y="160" width="10" height="40" fill="#FFA347" />
-                
-                {/* Shoes */}
-                <path d="M -14 200 L -22 204 L -10 204 Z" fill="#FFA347" />
-                <path d="M 14 200 L 22 204 L 10 204 Z" fill="#FFA347" />
-              </g>
-            </svg>
-
-            {/* Glowing sun in background */}
-            <div className="absolute top-[28%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-[#FFE5B4] opacity-55 blur-sm" />
+          {/* Simple Image Frame loading the local me.jpg file */}
+          <div className="relative w-full h-full bg-[#1e1013] rounded-xl overflow-hidden border border-terracotta/40">
+            <img 
+              src={me}
+              alt="me" 
+              className="w-full h-full object-cover rounded-lg"
+            />
           </div>
 
           {/* Bottom text representing custom frame caption */}
