@@ -1,13 +1,8 @@
 # Baan's Corner - Personal Portfolio Platform
 
-## Project Overview
 This is my personal project acting as a portfolio of my life. It's where I dump everything I care about — Linux configs, photos, music, and whatever else I'm into at the moment.
 
-No corporate bullshit. Just me.
-
----
-
-## Live Site
+Just me, my stuff & peace
 
 [https://baanbhaba.vercel.app](https://baanbhaba.vercel.app)
 
