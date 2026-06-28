@@ -1,0 +1,6 @@
+{
+  "name": "Anirban Haldar - Portfolio",
+  "description": "The personal portfolio of Anirban Haldar: Linux config tinkerer, photographer, and music maker based in Jaipur, India.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
