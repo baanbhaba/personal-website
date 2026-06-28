@@ -82,7 +82,7 @@ export default function Navbar() {
             className="bg-terracotta text-white font-sans font-bold text-xs md:text-sm tracking-wider px-5 py-2 rounded-lg border-2 border-transparent hover:bg-deep-rose hover:shadow-solid-indigo transition-all duration-300 flex items-center gap-2 cursor-pointer"
           >
             <MessageCircle className="w-4 h-4" />
-            Say Hello
+            Namaste
           </button>
         </div>
       </div>
