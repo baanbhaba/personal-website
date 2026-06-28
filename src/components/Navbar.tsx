@@ -46,20 +46,33 @@ export default function Navbar() {
         <div className="hidden md:flex items-center space-x-8">
           {[
             { label: 'ABOUT', target: 'about' },
-            { label: 'LINUX', target: 'linux' },
+            { label: 'LINUX', target: 'https://github.com/baanbhaba/hyprland-config', external: true },
             { label: 'PHOTOGRAPHY', target: 'photography' },
             { label: 'MUSIC', target: 'music' },
             { label: 'CONTACT', target: 'contact' },
-          ].map((link) => (
-            <button
-              key={link.label}
-              onClick={() => scrollToSection(link.target)}
-              className="font-sans text-sm font-bold tracking-widest text-terracotta hover:text-deep-rose transition-colors duration-200 cursor-pointer relative group"
-            >
-              {link.label}
-              <span className="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-deep-rose transition-all duration-300 group-hover:w-full"></span>
-            </button>
-          ))}
+          ].map((link) =>
+            link.external ? (
+              <a
+                key={link.label}
+                href={link.target}
+                target="_blank"
+                rel="noreferrer"
+                className="font-sans text-sm font-bold tracking-widest text-terracotta hover:text-deep-rose transition-colors duration-200 cursor-pointer relative group"
+              >
+                {link.label}
+                <span className="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-deep-rose transition-all duration-300 group-hover:w-full"></span>
+              </a>
+            ) : (
+              <button
+                key={link.label}
+                onClick={() => scrollToSection(link.target)}
+                className="font-sans text-sm font-bold tracking-widest text-terracotta hover:text-deep-rose transition-colors duration-200 cursor-pointer relative group"
+              >
+                {link.label}
+                <span className="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-deep-rose transition-all duration-300 group-hover:w-full"></span>
+              </button>
+            )
+          )}
         </div>
 
         {/* Say Hello Button */}

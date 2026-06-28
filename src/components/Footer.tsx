@@ -17,13 +17,13 @@ export default function Footer() {
 
         {/* Center copyright */}
         <div className="font-sans text-xs text-on-surface/60 text-center font-medium">
-          © 2024 Anirbaan Haldar — Crafted with Digital Pride
+           Anirbaan Haldar — A Kid
         </div>
 
         {/* Right socials */}
         <div className="flex items-center space-x-6">
           <a
-            href="https://github.com/anirbanhaldar"
+            href="https://github.com/baanbhaba"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1.5 font-sans font-bold text-xs tracking-wider text-terracotta hover:text-deep-rose transition-colors"
@@ -48,7 +48,7 @@ export default function Footer() {
             RSS
           </a>
           <a
-            href="https://github.com/anirbanhaldar/portfolio-bazaar"
+            href="https://github.com/baanbhaba/personal-website"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1.5 font-sans font-bold text-xs tracking-wider text-terracotta hover:text-deep-rose transition-colors"

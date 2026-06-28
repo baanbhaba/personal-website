@@ -14,6 +14,7 @@ export interface PhotoFrame {
   camera: string;
   settings: string;
   description: string;
+  unsplashUrl?: string;
 }
 
 export interface GuestbookMessage {

@@ -57,7 +57,7 @@ export default function Hero() {
             </h1>
             
             <p className="font-serif italic text-2xl md:text-3xl text-deep-rose tracking-wide">
-              Linux tinkerer. Photographer. Hyderabad in my veins.
+              A simple kid who hobbies Arch and Hyprland.
             </p>
             
             <div className="flex items-center gap-3 pt-2 text-on-surface">

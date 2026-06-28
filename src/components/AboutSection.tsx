@@ -208,6 +208,7 @@ export default function AboutSection() {
 
         {/* Card 2: /LINUX dotfiles & interactive setup (60% width on large screens) */}
         <motion.div
+          id="linux"
           initial={{ opacity: 0, x: 25 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -255,7 +256,7 @@ export default function AboutSection() {
             {/* Links section from mockup */}
             <div className="flex gap-4 mb-4">
               <a
-                href="https://github.com/anirbanhaldar"
+                href="https://github.com/baanbhaba"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 font-sans font-bold text-xs tracking-wider text-saffron hover:text-turmeric transition-colors"
@@ -263,16 +264,15 @@ export default function AboutSection() {
                 <ChevronRight className="w-4 h-4 text-terracotta" />
                 → GitHub
               </a>
-              <button
-                onClick={() => {
-                  setActiveTab('editor');
-                  setSelectedDotfile(DOTFILES[0]);
-                }}
-                className="inline-flex items-center gap-1.5 font-sans font-bold text-xs tracking-wider text-saffron hover:text-turmeric cursor-pointer"
+              <a
+                href="https://github.com/baanbhaba/hyprland-config"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 font-sans font-bold text-xs tracking-wider text-saffron hover:text-turmeric transition-colors"
               >
                 <ChevronRight className="w-4 h-4 text-terracotta" />
-                → Dotfiles
-              </button>
+                → Hyprland Config
+              </a>
             </div>
 
             {/* Interactive Area Container */}
