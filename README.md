@@ -1,10 +1,15 @@
 # Baan's Corner - Personal Portfolio Platform
 
 ## Project Overview
+This is my personal project acting as a portfolio of my life. It's where I dump everything I care about — Linux configs, photos, music, and whatever else I'm into at the moment.
 
-Baan's Corner is a high-performance, single-page personal portfolio application designed to showcase professional profiles, personal configurations, creative works, and interactive components. The system features a custom-engineered aesthetic optimized for high visual fidelity, seamless layout transition animations, and high usability across all hardware form factors.
+No corporate bullshit. Just me.
 
-The architecture is implemented entirely using React 18, Vite, and Tailwind CSS. It is structured modularly to separate architectural elements, UI wrappers, and complex feature components into distinct, maintainable sub-modules.
+---
+
+## Live Site
+
+[https://baanbhaba.vercel.app](https://baanbhaba.vercel.app)
 
 ---
 
