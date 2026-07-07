@@ -11,66 +11,22 @@ import { Dotfile } from '../types';
 // Mock Dotfiles database
 const DOTFILES: Dotfile[] = [
   {
-    name: '.config/i3/config',
-    path: '~/.config/i3/config',
-    language: 'bash',
-    content: `# i3 window manager config
-font pango:JetBrains Mono 10
-floating_modifier Mod4
-
-# Start terminal on Mod4+Return
-bindsym Mod4+Return exec kitty
-
-# Windows border configuration
-default_border pixel 2
-gaps inner 12
-gaps outer 6
-
-# Custom Colors (Jaipur Bazaar theme)
-client.focused          #9b3f27 #9b3f27 #ffffff #f4a300 #9b3f27
-client.focused_inactive #506072 #506072 #ffffff #dcc0ba #506072
-client.unfocused        #fdf8f0 #fdf8f0 #231917 #dcc0ba #fdf8f0
-`
+    name: 'Personal Projects',
+    path: '~/personal_projects',
+    language: 'english',
+    content: `NULL_PERSONAL_PROJECTS`
   },
   {
-    name: 'init.lua (Neovim)',
-    path: '~/.config/nvim/init.lua',
-    language: 'lua',
-    content: `-- Neovim Custom Lua config
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.shiftwidth = 2
-vim.opt.tabstop = 2
-vim.opt.expandtab = true
-vim.g.mapleader = " "
-
--- Lazy.nvim package manager bootstrap
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({ "git", "clone", "filter=blob:none", "https://github.com/folke/lazy.nvim.git", lazypath })
-end
-
--- Handpicked Theme bindings
-vim.cmd [[colorscheme bazaar-terracotta]]
-`
+    name: 'Ongoing Projects',
+    path: '~/.ongoing_projects',
+    language: 'procrastination',
+    content: `NULL_ONGOING_PROJECTS`
   },
   {
-    name: '.bashrc',
-    path: '~/.bashrc',
-    language: 'bash',
-    content: `# My custom .bashrc
-export PATH=$HOME/.local/bin:$PATH
-alias l='ls -lah --color=auto'
-alias pacman='sudo pacman --color=auto'
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-
-# Display beautiful Neofetch on startup
-if [ -x "$(command -v neofetch)" ]; then
-  neofetch --ascii_distro arch
-fi
-
-echo -e "\\n  \\e[33mPull up a charpai. The tea is brewing...\\e[0m\\n"
-`
+    name: 'Future Plans',
+    path: '~/future_plans',
+    language: 'hope',
+    content: `NULL_FUTURE_PLANS`
   }
 ];
 
@@ -79,13 +35,13 @@ export default function AboutSection() {
   const [selectedDotfile, setSelectedDotfile] = useState<Dotfile>(DOTFILES[0]);
   const [terminalInput, setTerminalInput] = useState('');
   const [terminalHistory, setTerminalHistory] = useState<Array<{ cmd: string; out: string }>>([
-    { cmd: 'whoami', out: 'anirbaan' },
-    { cmd: 'fastfetch', out: `                  /\\   OS    ➜  Arch Linux
-                 /  \\  KER   ➜  Linux 7.0.13-arch1-2
-                /\\   \\ UP    ➜  3 hours, 9 mins
-               /  __  \\ PKG   ➜  16 (flatpak), 1205 (pacman)
-              /  (  )  \\ WM    ➜  Hyprland 0.55.4 (Wayland)
-             /  _    _  \\ MEM   ➜  3.57 GiB / 7.67 GiB (47%)
+    { cmd: 'whoami', out: 'anirbaan haldar' },
+    { cmd: 'fastfetch', out: `                  /\\ OS➜  Arch Linux
+                 /  \\  KER ➜  Linux - stable one
+                /\\   \\   UP  ➜ No Idea 
+               /  __  \\    MEM  ➜ 20$ worth
+              /  (  )  \\     WM  ➜  Hyprland 
+             /  _    _  \\ 
             /  (_______)  \\
            /              \\
           /________________\\` }
@@ -101,33 +57,33 @@ export default function AboutSection() {
     let out = '';
 
     if (cmd === 'help') {
-      out = 'Available commands: fastfetch, ls, cat [file], clear, theme, cowsay [msg], help';
+      out = 'Available commands: fastfetch, ls, cat [file], theme, cowsay [msg], help';
     } else if (cmd === 'fastfetch' || cmd === 'neofetch') {
-      out = `                  /\\   OS    ➜  Arch Linux
-                 /  \\  KER   ➜  Linux 7.0.13-arch1-2
-                /\\   \\ UP    ➜  3 hours, 9 mins
-               /  __  \\ PKG   ➜  16 (flatpak), 1205 (pacman)
-              /  (  )  \\ WM    ➜  Hyprland 0.55.4 (Wayland)
-             /  _    _  \\ MEM   ➜  3.57 GiB / 7.67 GiB (47%)
+      out = `                  /\\  OS ➜  Arch Linux
+                 /  \\  KER ➜  Linux - stable one
+                /\\   \\  UP  ➜ No Idea 
+               /  __  \\   MEM  ➜ 20$ worth
+              /  (  )  \\    WM  ➜  Hyprland 
+             /  _    _  \\ 
             /  (_______)  \\
            /              \\
           /________________\\`;
     } else if (cmd === 'ls') {
-      out = 'total 24K\n-rw-r--r-- 1 anirbaan users  452 Jun 28 04:09 .bashrc\ndrwxr-xr-x 3 anirbaan users 4.0K Jun 28 04:09 .config/\n-rwxr-xr-x 1 anirbaan users  1.2K Jun 28 04:09 compile-configs.sh';
+      out = 'total - NULL\n-rw-r--r-- 1 baanbhaba 0.0K personal_projects\ndrwxr-xr-x 3 baanbhaba 0.0K ongoing_projects\n-rwxr-xr-x 1 baanbhaba 0.0K future_plans';
     } else if (cmd.startsWith('cat ')) {
       const fileName = cmd.replace('cat ', '').trim();
       const matched = DOTFILES.find(d => d.name.toLowerCase().includes(fileName) || d.path.toLowerCase().includes(fileName));
       if (matched) {
         out = matched.content;
       } else {
-        out = `cat: ${fileName}: No such file or directory. Try 'cat .bashrc' or 'cat init.lua'`;
+        out = `cat: ${fileName}: No such file or directory. Try 'cat personal_projects' or 'cat future_plans'`;
       }
     } else if (cmd === 'clear') {
       setTerminalHistory([]);
       setTerminalInput('');
       return;
     } else if (cmd === 'theme') {
-      out = 'Active Theme: Organic Terracotta & Saffron. Contrast ratio optimized.';
+      out = 'Active Theme: Smth that isnt too boring i hope';
     } else if (cmd.startsWith('cowsay ')) {
       const msg = cmd.replace('cowsay ', '').trim();
       out = ` _____________________
@@ -139,7 +95,7 @@ export default function AboutSection() {
                 ||----w |
                 ||     ||`;
     } else {
-      out = `bash: command not found: ${cmd}. Type 'help' for options.`;
+      out = `bash: command not found: ${cmd}. Type 'help' for pre-defined commands.`;
     }
 
     setTerminalHistory(prev => [...prev, { cmd: terminalInput, out }]);
@@ -240,7 +196,7 @@ export default function AboutSection() {
                     activeTab === 'terminal' ? 'bg-saffron text-black shadow' : 'text-dusty-rose hover:text-white'
                   }`}
                 >
-                  Terminal
+                  TERMINAL
                 </button>
                 <button
                   onClick={() => setActiveTab('editor')}
@@ -248,7 +204,7 @@ export default function AboutSection() {
                     activeTab === 'editor' ? 'bg-saffron text-black shadow' : 'text-dusty-rose hover:text-white'
                   }`}
                 >
-                  Dotfiles
+                  PROJECTS
                 </button>
               </div>
             </div>
@@ -287,12 +243,6 @@ export default function AboutSection() {
                     className="flex flex-col space-y-2 h-full justify-between"
                   >
                     <div className="overflow-y-auto flex-1 space-y-2 pb-4">
-                      <p className="text-gray-400 text-[10px]">
-                        Last login: Sun Jun 28 04:09:56 on tty1
-                      </p>
-                      <p className="text-saffron">
-                        Type 'help' to see fun commands!
-                      </p>
                       
                       {terminalHistory.map((hist, index) => (
                         <div key={index} className="space-y-1">
@@ -313,7 +263,7 @@ export default function AboutSection() {
                         type="text"
                         value={terminalInput}
                         onChange={(e) => setTerminalInput(e.target.value)}
-                        placeholder="ls, fastfetch, cowsay hello..."
+                        placeholder="TYPE THISSSS ➜ help"
                         className="flex-1 bg-transparent border-none text-white focus:outline-none placeholder-gray-600 font-mono"
                       />
                       <button type="submit" className="text-saffron hover:text-white p-1">
