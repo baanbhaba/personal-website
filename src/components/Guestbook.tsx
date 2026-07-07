@@ -22,7 +22,7 @@ export default function Guestbook() {
   const contactLinks: ContactLink[] = [
     {
       name: 'Email',
-      label: '// SAY HELLO',
+      label: 'VANAKKAM',
       title: 'EMAIL ME',
       url: 'mailto:anirbaanhaldar@proton.me',
       icon: <Mail className="w-5 h-5" />,
@@ -32,7 +32,7 @@ export default function Guestbook() {
     },
     {
       name: 'GitHub',
-      label: '// CODEBASE',
+      label: 'CODEBASE',
       title: 'GITHUB',
       url: 'https://github.com/baanbhaba',
       icon: <Github className="w-5 h-5" />,
@@ -42,7 +42,7 @@ export default function Guestbook() {
     },
     {
       name: 'LinkedIn',
-      label: '// NETWORK',
+      label: 'NETWORK',
       title: 'LINKEDIN',
       url: 'https://www.linkedin.com/in/baanbhaba/',
       icon: <Linkedin className="w-5 h-5" />,
@@ -52,7 +52,7 @@ export default function Guestbook() {
     },
     {
       name: 'Instagram',
-      label: '// STREET LIFE',
+      label: 'STREET LIFE',
       title: 'INSTAGRAM',
       url: 'https://instagram.com/baanbhaba',
       icon: <Instagram className="w-5 h-5" />,
@@ -62,7 +62,7 @@ export default function Guestbook() {
     },
     {
       name: 'Unsplash',
-      label: '// PHOTOGRAPHY',
+      label: 'PHOTOGRAPHY',
       title: 'UNSPLASH',
       url: 'https://unsplash.com/@baanbhaba',
       icon: <span className="font-sans text-[11px] font-black leading-none">UN</span>,

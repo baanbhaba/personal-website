@@ -17,7 +17,7 @@ export default function Footer() {
 
         {/* Center copyright */}
         <div className="font-sans text-xs text-on-surface/60 text-center font-medium">
-           Anirbaan Haldar — A Kid
+          A Kid
         </div>
 
         {/* Right socials */}

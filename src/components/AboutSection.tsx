@@ -225,7 +225,7 @@ export default function AboutSection() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
               <div>
                 <h2 className="font-display text-4xl sm:text-5xl text-black bg-saffron px-4 py-1.5 rounded-lg border-2 border-black shadow-solid-dark tracking-tighter uppercase inline-block transform rotate-1 select-none">
-                  THE HOBBY
+                  / THE HOBBY
                 </h2>
                 <p className="font-serif italic text-lg text-dusty-rose mt-3">
                   I tinker with configs. It's fun.
