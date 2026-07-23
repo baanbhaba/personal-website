@@ -46,14 +46,14 @@ const ARTISTS: ArtistConfig[] = [
         year: '2022',
         url: 'https://music.apple.com/in/album/mr-morale-the-big-steppers/1623854804',
         coverDescription: 'A raw, introspective double-album masterpiece.',
-        badge: 'RAW'
+        badge: 'BREAK-THROUGH'
       },
       {
         title: 'DAMN.',
         year: '2017',
         url: 'https://music.apple.com/in/album/damn/1440860105',
         coverDescription: 'Pulitzer Prize-winning sonic perfection.',
-        badge: 'CLASSIC'
+        badge: 'THE AUX'
       },
       {
         title: 'good kid, m.A.A.d city',
@@ -77,14 +77,14 @@ const ARTISTS: ArtistConfig[] = [
         year: '2016',
         url: 'https://music.apple.com/in/album/blonde/1146195596',
         coverDescription: 'A sweeping, avant-garde collage of memory, guitar, and vocal pitches.',
-        badge: 'MASTERPIECE'
+        badge: 'LIFEs STORY'
       },
       {
         title: 'Channel Orange',
         year: '2012',
         url: 'https://music.apple.com/in/album/channel-orange/1441474453',
         coverDescription: 'A vivid, sunny-yet-melancholic exploration of youth and heartbreak.',
-        badge: 'CLASSIC'
+        badge: 'NOT SO BUMPY RIDE'
       }
     ]
   },
@@ -146,7 +146,7 @@ const ARTISTS: ArtistConfig[] = [
         year: '2021',
         url: 'https://music.apple.com/in/album/actual-life-2-november-5-2021-january-15-2022/1590740924',
         coverDescription: 'A gorgeous exploration of hope, friendship, and grief.',
-        badge: 'DEEP CHILL'
+        badge: 'THE BEST'
       },
       {
         title: 'Actual Life 1',
@@ -176,7 +176,7 @@ export default function AnalogSynth() {
       >
         {/* Sticky Vinyl Tag */}
         <div className="absolute top-3 right-3 opacity-90 z-10 pointer-events-none transform rotate-12 bg-saffron text-black border border-black font-sans font-black text-[9px] tracking-widest px-2.5 py-1 rounded shadow-sm uppercase">
-          HEAVY ROTATION ⚡
+         WORK THROUGH IT
         </div>
 
         <div className="space-y-4 z-10 mb-5">
@@ -279,10 +279,10 @@ export default function AnalogSynth() {
           <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[9px] font-mono text-dusty-rose/40">
             <span className="flex items-center gap-1">
               <Library className="w-3.5 h-3.5 text-dusty-rose/40" />
-              SELECT ALBUM TO STREAM
+              CLICK TO OPEN APPLE MUSIC
             </span>
             <span className="font-bold tracking-widest text-saffron">
-              NEO-CRATE DIGGING v2.1
+              STATUS HIT
             </span>
           </div>
         </div>

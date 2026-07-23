@@ -52,7 +52,7 @@ export default function Guestbook() {
     },
     {
       name: 'Instagram',
-      label: 'STREET LIFE',
+      label: 'PERSONAL LIFE',
       title: 'INSTAGRAM',
       url: 'https://instagram.com/baanbhaba',
       icon: <Instagram className="w-5 h-5" />,
@@ -87,11 +87,10 @@ export default function Guestbook() {
           </h2>
           
           <p className="font-serif italic text-lg sm:text-xl md:text-2xl text-dusty-rose max-w-2xl mx-auto leading-relaxed pt-2">
-            "A warm custom corner of the internet, capturing everyday moments with a heavy dose of music with a touch of linux"
+            "A warm custom corner of the internet, capturing everyday moments with a heavy dose of music with a hint of linux"
           </p>
         </div>
 
-        {/* Massive Bold Style Info Grid: 5 columns on desktop, beautifully optimized on tablets */}
         <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 pt-10 max-w-5xl mx-auto">
           {contactLinks.map((link) => (
             <a

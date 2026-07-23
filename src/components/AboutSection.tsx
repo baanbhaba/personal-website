@@ -42,7 +42,7 @@ export default function AboutSection() {
                /  __  \\    MEM  ➜ 20$ worth
               /  (  )  \\     WM  ➜  Hyprland 
              /  _    _  \\ 
-            /  (_______)  \\
+            /  (_______) \\
            /              \\
           /________________\\` }
   ]);
@@ -65,7 +65,7 @@ export default function AboutSection() {
                /  __  \\   MEM  ➜ 20$ worth
               /  (  )  \\    WM  ➜  Hyprland 
              /  _    _  \\ 
-            /  (_______)  \\
+            /  (_______) \\
            /              \\
           /________________\\`;
     } else if (cmd === 'ls') {
@@ -91,7 +91,7 @@ export default function AboutSection() {
  ---------------------
         \\   ^__^
          \\  (oo)\\_______
-            (__)\\       )\\/\\
+            (__)\\  meow  )\\/\\
                 ||----w |
                 ||     ||`;
     } else {

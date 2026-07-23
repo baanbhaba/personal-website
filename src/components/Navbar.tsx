@@ -75,7 +75,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Say Hello Button */}
         <div>
           <button
             onClick={() => scrollToSection('contact')}

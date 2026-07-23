@@ -100,7 +100,7 @@ export default function Hero() {
 
           {/* Bottom text representing custom frame caption */}
           <div className="absolute bottom-1 right-3 text-[10px] font-mono text-[#DCC0BA] opacity-60">
-            HYDERABAD, TS // FRAME #17
+            AGE - 20 // FRAME #44
           </div>
         </motion.div>
       </motion.div>
