@@ -4,7 +4,7 @@ This is my personal project acting as a portfolio of my life. It's where I dump 
 
 Just me, my stuff & peace
 
-[https://baanbhaba.vercel.app](https://baanbhaba.vercel.app)
+[https://baanbhaba.dev](https://baanbhaba.dev)
 
 ---
 
