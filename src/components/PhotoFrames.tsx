@@ -87,6 +87,7 @@ export default function PhotoFrames() {
 
   // State to track which frame is showing in the polaroid preview card
   const [previewIndex, setPreviewIndex] = useState(0);
+  const previewFrame = CURATED_FRAMES[previewIndex]!;
 
   // Set a random preview index on mount
   React.useEffect(() => {
@@ -103,7 +104,7 @@ export default function PhotoFrames() {
     setPreviewIndex(nextIndex);
   };
 
-  const activeFrame = CURATED_FRAMES[currentIndex];
+  const activeFrame = CURATED_FRAMES[currentIndex]!;
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % CURATED_FRAMES.length);
@@ -197,8 +198,8 @@ export default function PhotoFrames() {
             >
               <div className="w-full h-[85%] bg-gray-100 rounded overflow-hidden relative">
                 <img
-                  src={CURATED_FRAMES[previewIndex].url}
-                  alt={CURATED_FRAMES[previewIndex].title}
+                  src={previewFrame.url}
+                  alt={previewFrame.title}
                   className="w-full h-full object-cover grayscale-15 contrast-105"
                   referrerPolicy="no-referrer"
                 />
@@ -208,7 +209,7 @@ export default function PhotoFrames() {
                 </div>
               </div>
               <div className="text-center font-serif italic text-[11px] text-gray-500 mt-2 truncate w-full px-1">
-                {CURATED_FRAMES[previewIndex].title}
+                {previewFrame.title}
               </div>
             </motion.div>
 
@@ -252,7 +253,7 @@ export default function PhotoFrames() {
 
                 {/* Left Arrow */}
                 <button
-                  onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => { e.stopPropagation(); handlePrev(); }}
                   className="absolute left-3 top-1/2 -translate-y-1/2 p-2 bg-black/60 hover:bg-black/85 border border-white/20 rounded-full text-white cursor-pointer transition-colors z-20"
                 >
                   <ArrowLeft className="w-5 h-5" />
@@ -260,7 +261,7 @@ export default function PhotoFrames() {
 
                 {/* Right Arrow */}
                 <button
-                  onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => { e.stopPropagation(); handleNext(); }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-black/60 hover:bg-black/85 border border-white/20 rounded-full text-white cursor-pointer transition-colors z-20"
                 >
                   <ArrowRight className="w-5 h-5" />

@@ -162,7 +162,7 @@ const ARTISTS: ArtistConfig[] = [
 export default function AnalogSynth() {
   const [activeArtistId, setActiveArtistId] = useState<string>('kendrick');
 
-  const activeArtist = ARTISTS.find((a) => a.id === activeArtistId) || ARTISTS[0];
+  const activeArtist = ARTISTS.find((a) => a.id === activeArtistId) || ARTISTS[0]!;
 
   return (
     <div id="music" className="lg:col-span-2 flex flex-col justify-between">

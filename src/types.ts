@@ -29,5 +29,5 @@ export interface Dotfile {
   name: string;
   path: string;
   content: string;
-  language: 'bash' | 'lua' | 'vim';
+  language: string;
 }

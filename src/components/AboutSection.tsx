@@ -32,19 +32,19 @@ const DOTFILES: Dotfile[] = [
 
 export default function AboutSection() {
   const [activeTab, setActiveTab] = useState<'terminal' | 'editor'>('terminal');
-  const [selectedDotfile, setSelectedDotfile] = useState<Dotfile>(DOTFILES[0]);
+  const [selectedDotfile, setSelectedDotfile] = useState<Dotfile>(DOTFILES[0]!);
   const [terminalInput, setTerminalInput] = useState('');
   const [terminalHistory, setTerminalHistory] = useState<Array<{ cmd: string; out: string }>>([
     { cmd: 'whoami', out: 'anirbaan haldar' },
-    { cmd: 'fastfetch', out: `                  /\\ OS➜  Arch Linux
-                 /  \\  KER ➜  Linux - stable one
-                /\\   \\   UP  ➜ No Idea 
-               /  __  \\    MEM  ➜ 20$ worth
-              /  (  )  \\     WM  ➜  Hyprland 
-             /  _    _  \\ 
-            /  (_______) \\
-           /              \\
-          /________________\\` }
+    { cmd: 'fastfetch', out: `        ,\`''''.    OS ➜ Fedora EVEYTHING 
+       |   ,.  |   KER ➜  Linux - stable one
+       |  |  '_'   UP  ➜ No Idea 
+ ,....|  |..       MEM ➜ 20$ worth
+.'  _,|    ..'     WM  ➜  Hyprland 
+|  |   |  |        
+|  ',_,'  |        
+ '.     ,'         
+   '''''             ` }
   ]);
 
   const [copiedText, setCopiedText] = useState(false);
@@ -59,16 +59,16 @@ export default function AboutSection() {
     if (cmd === 'help') {
       out = 'Available commands: fastfetch, ls, cat [file], theme, cowsay [msg], help';
     } else if (cmd === 'fastfetch' || cmd === 'neofetch') {
-      out = `                  /\\  OS ➜  Arch Linux
-                 /  \\  KER ➜  Linux - stable one
-                /\\   \\  UP  ➜ No Idea 
-               /  __  \\   MEM  ➜ 20$ worth
-              /  (  )  \\    WM  ➜  Hyprland 
-             /  _    _  \\ 
-            /  (_______) \\
-           /              \\
-          /________________\\`;
-    } else if (cmd === 'ls') {
+    out = `        ,\`''''.    OS ➜ Fedora EVEYTHING 
+       |   ,.  |   KER ➜  Linux - stable one
+       |  |  '_'   UP  ➜ No Idea 
+ ,....|  |..       MEM ➜ 20$ worth
+.'  _,|    ..'     WM  ➜  Hyprland 
+|  |   |  |        
+|  ',_,'  |        
+ '.     ,'         
+   '''''           `;
+} else if (cmd === 'ls') {
       out = 'total - NULL\n-rw-r--r-- 1 baanbhaba 0.0K personal_projects\ndrwxr-xr-x 3 baanbhaba 0.0K ongoing_projects\n-rwxr-xr-x 1 baanbhaba 0.0K future_plans';
     } else if (cmd.startsWith('cat ')) {
       const fileName = cmd.replace('cat ', '').trim();
@@ -98,7 +98,7 @@ export default function AboutSection() {
       out = `bash: command not found: ${cmd}. Type 'help' for pre-defined commands.`;
     }
 
-    setTerminalHistory(prev => [...prev, { cmd: terminalInput, out }]);
+    setTerminalHistory((prev: Array<{ cmd: string; out: string }>) => [...prev, { cmd: terminalInput, out }]);
     setTerminalInput('');
   };
 
@@ -146,7 +146,7 @@ export default function AboutSection() {
             
             <div className="flex flex-wrap gap-2.5">
               {[
-                { name: 'Arch Linux', color: 'bg-saffron text-on-surface hover:rotate-2' },
+                { name: 'Fedora Linux', color: 'bg-saffron text-on-surface hover:rotate-2' },
                 { name: 'Hyprland', color: 'bg-terracotta text-white hover:-rotate-1' },
                 { name: 'Music', color: 'bg-deep-rose text-white hover:rotate-1' },
                 { name: 'Doing dumb stuff', color: 'bg-turmeric text-on-surface hover:-rotate-2' },
@@ -262,7 +262,7 @@ export default function AboutSection() {
                       <input
                         type="text"
                         value={terminalInput}
-                        onChange={(e) => setTerminalInput(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTerminalInput(e.target.value)}
                         placeholder="TYPE THISSSS ➜ help"
                         className="flex-1 bg-transparent border-none text-white focus:outline-none placeholder-gray-600 font-mono"
                       />
