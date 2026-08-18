@@ -15,13 +15,46 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const bgMusicRef = useRef<HTMLAudioElement | null>(null);
 
+  // Mouse Tracking & Meow Speech State for Cursor Companion Cat
+  const [mousePos, setMousePos] = useState({ x: 100, y: 100 });
+  const [facingLeft, setFacingLeft] = useState(false);
+  const [meowText, setMeowText] = useState<string | null>(null);
+  const meowTimeoutRef = useRef<any>(null);
+
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    let lastX = window.innerWidth / 2;
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+      if (e.clientX < lastX - 5) {
+        setFacingLeft(true);
+      } else if (e.clientX > lastX + 5) {
+        setFacingLeft(false);
+      }
+      lastX = e.clientX;
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+  const triggerCatMeow = () => {
+    playPopSound();
+    const meows = [
+      "meow! 🐾",
+      "purrrr~ 😺",
+      "feeding your rice! 🍚",
+      "hyprland gaps > 0 ⚡",
+      "meow meow! ✨",
+      "following u 👀"
+    ];
+    const chosen = meows[Math.floor(Math.random() * meows.length)] || "meow! 🐾";
+    setMeowText(chosen);
+
+    if (meowTimeoutRef.current) clearTimeout(meowTimeoutRef.current);
+    meowTimeoutRef.current = setTimeout(() => {
+      setMeowText(null);
+    }, 2200);
+  };
 
   // Initialize ambient music audio element
   useEffect(() => {
@@ -205,31 +238,47 @@ export default function Navbar() {
         </AnimatePresence>
       </nav>
 
-      {/* Floating Pixel Cat Companion Sprite (Bottom Left) */}
+      {/* Smooth Cursor-Following Pixel Cat Companion Sprite */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="fixed bottom-5 left-5 z-40"
+        animate={{
+          x: mousePos.x + 20,
+          y: mousePos.y + 20,
+        }}
+        transition={{
+          type: 'spring',
+          damping: 25,
+          stiffness: 180,
+          mass: 0.5
+        }}
+        className="fixed top-0 left-0 z-50 pointer-events-none hidden md:block"
       >
-        <div className="relative group">
-          {/* Interactive Speech Bubble */}
-          <div className="absolute bottom-14 left-0 bg-white border-2 border-black rounded-xl px-3 py-1.5 shadow-solid-dark opacity-0 group-hover:opacity-100 transition-all pointer-events-none whitespace-nowrap font-mono text-[11px] font-black text-black z-50 transform -translate-y-1">
-            <span>meow! ~ feeding your rice 🐾</span>
-            <div className="absolute -bottom-2 left-4 w-3 h-3 bg-white border-r-2 border-b-2 border-black transform rotate-45" />
-          </div>
+        <div className="relative pointer-events-auto cursor-pointer" onClick={triggerCatMeow}>
+          {/* Dynamic Meow / Speech Bubble Popup */}
+          <AnimatePresence>
+            {meowText && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8, y: 5 }}
+                animate={{ opacity: 1, scale: 1, y: -10 }}
+                exit={{ opacity: 0, scale: 0.8, y: -5 }}
+                className="absolute -top-10 left-1/2 -translate-x-1/2 bg-white border-2 border-black rounded-xl px-2.5 py-1 shadow-solid-dark whitespace-nowrap font-mono text-[10px] font-black text-black z-50 select-none"
+              >
+                <span>{meowText}</span>
+                <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-white border-r-2 border-b-2 border-black transform rotate-45" />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Floating Pixel Cat Sprite */}
           <motion.div
-            animate={{ y: [0, -6, 0] }}
-            transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-            onClick={() => playPopSound()}
-            className="w-12 h-12 rounded-xl bg-saffron/20 border-2 border-black p-1 shadow-solid-dark cursor-pointer flex items-center justify-center hover:scale-110 active:scale-95 transition-all bg-cream"
-            title="your pixel cat companion 🐾 (click for pop!)"
+            animate={{ y: [0, -5, 0] }}
+            transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}
+            className={`w-11 h-11 transition-transform duration-200 ${facingLeft ? 'scale-x-[-1]' : ''}`}
+            title="Click cat companion to meow! 🐾"
           >
             <img
               src="/cat_companion.png"
               alt="Pixel Cat Companion"
-              className="w-full h-full object-contain image-rendering-pixelated"
+              className="w-full h-full object-contain image-rendering-pixelated drop-shadow-[2px_4px_0px_rgba(0,0,0,0.5)] hover:scale-125 transition-transform"
             />
           </motion.div>
         </div>
