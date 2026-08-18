@@ -8,6 +8,8 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import AboutSection from './components/AboutSection';
 import PhotoFrames from './components/PhotoFrames';
+import ProjectsPortfolio from './components/ProjectsPortfolio';
+import SkillsShowcase from './components/SkillsShowcase';
 import Guestbook from './components/Guestbook';
 import Footer from './components/Footer';
 
@@ -27,6 +29,14 @@ export default function App() {
 
         {/* Photographic Frames & Music Synth Row */}
         <PhotoFrames />
+
+        {/* Dedicated Skills Grid Showcase */}
+        <SkillsShowcase />
+
+        {/* Git Projects Portfolio Section (Full Width) */}
+        <section id="projects" className="py-6 px-4 md:px-8 max-w-7xl mx-auto">
+          <ProjectsPortfolio />
+        </section>
 
         {/* Contact Guestbook Block */}
         <Guestbook />

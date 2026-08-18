@@ -3,30 +3,68 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Terminal as TerminalIcon, Github, FolderGit2, Play, Check, ChevronRight, Sparkles, MapPin } from 'lucide-react';
+import { Terminal as TerminalIcon, Github, FolderGit2, Play, Check, ChevronRight, Sparkles, MapPin, Gamepad2, X, RefreshCw } from 'lucide-react';
 import { Dotfile } from '../types';
+import { playKeyClickSound } from '../utils/soundEffects';
 
-// Mock Dotfiles database
+// Dotfiles & Projects Config Database
 const DOTFILES: Dotfile[] = [
   {
-    name: 'Personal Projects',
-    path: '~/personal_projects',
-    language: 'english',
-    content: `NULL_PERSONAL_PROJECTS`
+    name: 'hyprland.conf',
+    path: '~/.config/hypr/hyprland.conf',
+    language: 'bash',
+    content: `# Hyprland Main Configuration - baanbhaba
+autostart = waybar & mako & hyprpaper
+monitor=,preferred,auto,1
+
+input {
+    kb_layout = us
+    follow_mouse = 1
+    touchpad { natural_scroll = yes }
+}
+
+general {
+    gaps_in = 5
+    gaps_out = 10
+    border_size = 2
+    col.active_border = rgba(f4a300ee) rgba(a43152ee) 45deg
+    col.inactive_border = rgba(506072aa)
+    layout = dwindle
+}
+
+decoration {
+    rounding = 10
+    blur { enabled = true, size = 3 }
+}`
   },
   {
-    name: 'Ongoing Projects',
-    path: '~/.ongoing_projects',
-    language: 'procrastination',
-    content: `NULL_ONGOING_PROJECTS`
+    name: 'personal_projects.json',
+    path: '~/projects/personal.json',
+    language: 'json',
+    content: `[
+  {
+    "name": "personal-website",
+    "stack": ["React 18", "Tailwind CSS", "Vite", "Framer Motion"],
+    "status": "Active Development"
   },
   {
-    name: 'Future Plans',
-    path: '~/future_plans',
-    language: 'hope',
-    content: `NULL_FUTURE_PLANS`
+    "name": "hyprland-config",
+    "stack": ["Bash", "Hyprland", "Waybar"],
+    "status": "Maintained"
+  }
+]`
+  },
+  {
+    name: 'future_plans.md',
+    path: '~/docs/future_plans.md',
+    language: 'markdown',
+    content: `# Roadmap
+- [x] Build personal retro portfolio website
+- [x] Unsplash stats API integration
+- [ ] Add more Linux dotfiles & Hyprland themes
+- [ ] Build custom Neovim plugin`
   }
 ];
 
@@ -34,9 +72,20 @@ export default function AboutSection() {
   const [activeTab, setActiveTab] = useState<'terminal' | 'editor'>('terminal');
   const [selectedDotfile, setSelectedDotfile] = useState<Dotfile>(DOTFILES[0]!);
   const [terminalInput, setTerminalInput] = useState('');
+  const [snakeOpen, setSnakeOpen] = useState(false);
+  const [snakeScore, setSnakeScore] = useState(0);
+  const [snakeHighScore, setSnakeHighScore] = useState(0);
+  const [snakeGameOver, setSnakeGameOver] = useState(false);
+
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const snakeRef = useRef<Array<{ x: number; y: number }>>([{ x: 10, y: 10 }]);
+  const foodRef = useRef<{ x: number; y: number }>({ x: 15, y: 15 });
+  const dirRef = useRef<{ x: number; y: number }>({ x: 1, y: 0 });
+  const gameLoopRef = useRef<any>(null);
+
   const [terminalHistory, setTerminalHistory] = useState<Array<{ cmd: string; out: string }>>([
     { cmd: 'whoami', out: 'anirbaan haldar' },
-    { cmd: 'fastfetch', out: `        ,\`''''.    OS ➜ Fedora EVEYTHING 
+    { cmd: 'fastfetch', out: `        ,\`''''.    OS ➜ Fedora EVERYTHING 
        |   ,.  |   KER ➜  Linux - stable one
        |  |  '_'   UP  ➜ No Idea 
  ,....|  |..       MEM ➜ 20$ worth
@@ -49,6 +98,95 @@ export default function AboutSection() {
 
   const [copiedText, setCopiedText] = useState(false);
 
+  // Snake Game Engine Initialization
+  const startSnakeGame = () => {
+    snakeRef.current = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+    foodRef.current = { x: Math.floor(Math.random() * 19), y: Math.floor(Math.random() * 19) };
+    dirRef.current = { x: 1, y: 0 };
+    setSnakeScore(0);
+    setSnakeGameOver(false);
+  };
+
+  useEffect(() => {
+    if (!snakeOpen) return;
+    startSnakeGame();
+
+    // Lock page background scrolling while playing Snake
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'KeyW', 'KeyS', 'KeyA', 'KeyD'].includes(e.code)) {
+        e.preventDefault();
+      }
+
+      if (['ArrowUp', 'KeyW'].includes(e.code) && dirRef.current.y === 0) dirRef.current = { x: 0, y: -1 };
+      if (['ArrowDown', 'KeyS'].includes(e.code) && dirRef.current.y === 0) dirRef.current = { x: 0, y: 1 };
+      if (['ArrowLeft', 'KeyA'].includes(e.code) && dirRef.current.x === 0) dirRef.current = { x: -1, y: 0 };
+      if (['ArrowRight', 'KeyD'].includes(e.code) && dirRef.current.x === 0) dirRef.current = { x: 1, y: 0 };
+    };
+
+    window.addEventListener('keydown', handleKeyDown, { capture: true });
+
+    const interval = setInterval(() => {
+      if (!canvasRef.current) return;
+      const ctx = canvasRef.current.getContext('2d');
+      if (!ctx) return;
+
+      const snake = [...snakeRef.current];
+      const head = { x: snake[0]!.x + dirRef.current.x, y: snake[0]!.y + dirRef.current.y };
+
+      // Wall / Self Collision Check
+      if (
+        head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 ||
+        snake.some(segment => segment.x === head.x && segment.y === head.y)
+      ) {
+        setSnakeGameOver(true);
+        return;
+      }
+
+      snake.unshift(head);
+
+      // Food Collision Check
+      if (head.x === foodRef.current.x && head.y === foodRef.current.y) {
+        setSnakeScore(prev => {
+          const next = prev + 10;
+          if (next > snakeHighScore) setSnakeHighScore(next);
+          return next;
+        });
+        foodRef.current = {
+          x: Math.floor(Math.random() * 20),
+          y: Math.floor(Math.random() * 20)
+        };
+      } else {
+        snake.pop();
+      }
+
+      snakeRef.current = snake;
+
+      // Draw Grid Frame
+      ctx.fillStyle = '#120b0a';
+      ctx.fillRect(0, 0, 300, 300);
+
+      // Draw Food
+      ctx.fillStyle = '#f4a300';
+      ctx.fillRect(foodRef.current.x * 15 + 1, foodRef.current.y * 15 + 1, 13, 13);
+
+      // Draw Snake
+      snake.forEach((seg, i) => {
+        ctx.fillStyle = i === 0 ? '#4361ee' : '#a43152';
+        ctx.fillRect(seg.x * 15 + 1, seg.y * 15 + 1, 13, 13);
+      });
+    }, 100);
+
+    gameLoopRef.current = interval;
+
+    return () => {
+      document.body.style.overflow = '';
+      clearInterval(interval);
+      window.removeEventListener('keydown', handleKeyDown, { capture: true });
+    };
+  }, [snakeOpen]);
+
   const handleCommandSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!terminalInput.trim()) return;
@@ -57,9 +195,12 @@ export default function AboutSection() {
     let out = '';
 
     if (cmd === 'help') {
-      out = 'Available commands: fastfetch, ls, cat [file], theme, cowsay [msg], help';
+      out = 'Available commands: fastfetch, snake, keybinds, quote, ls, cat [file], theme, cowsay [msg], clear';
+    } else if (cmd === 'snake' || cmd === 'game' || cmd === 'play') {
+      setSnakeOpen(true);
+      out = 'Launching Snake Game 🐍... (Use Arrow Keys or WASD to control)';
     } else if (cmd === 'fastfetch' || cmd === 'neofetch') {
-    out = `        ,\`''''.    OS ➜ Fedora EVEYTHING 
+      out = `        ,\`''''.    OS ➜ Fedora EVERYTHING 
        |   ,.  |   KER ➜  Linux - stable one
        |  |  '_'   UP  ➜ No Idea 
  ,....|  |..       MEM ➜ 20$ worth
@@ -68,15 +209,34 @@ export default function AboutSection() {
 |  ',_,'  |        
  '.     ,'         
    '''''           `;
-} else if (cmd === 'ls') {
-      out = 'total - NULL\n-rw-r--r-- 1 baanbhaba 0.0K personal_projects\ndrwxr-xr-x 3 baanbhaba 0.0K ongoing_projects\n-rwxr-xr-x 1 baanbhaba 0.0K future_plans';
+    } else if (cmd === 'keybinds' || cmd === 'keys') {
+      out = `HYPRLAND KEYBINDINGS SHEET ⚡
+-----------------------------------------
+SUPER + Return       -> Launch Kitty Terminal
+SUPER + Q            -> Kill Active Window
+SUPER + Space        -> Rofi App Launcher
+SUPER + Shift + E    -> Exit Hyprland Session
+SUPER + F            -> Toggle Fullscreen Window
+SUPER + 1..9         -> Switch Workspaces
+SUPER + Drag Mouse   -> Move/Resize Window`;
+    } else if (cmd === 'quote' || cmd === 'status') {
+      const quotes = [
+        '"Hyprland gaps > 0 or I riot."',
+        '"Configured in Vim, written in VS Code."',
+        '"Linux is user-friendly. It\'s just picky about who its friends are."',
+        '"It\'s not a bug, it\'s an undocumented ricer feature."',
+        '"Less GUI, more terminal. Stay fast."'
+      ];
+      out = quotes[Math.floor(Math.random() * quotes.length)] || quotes[0]!;
+    } else if (cmd === 'ls') {
+      out = 'total 12K\n-rw-r--r-- 1 baanbhaba 452B hyprland.conf\n-rw-r--r-- 1 baanbhaba 320B personal_projects.json\n-rw-r--r-- 1 baanbhaba 210B future_plans.md';
     } else if (cmd.startsWith('cat ')) {
       const fileName = cmd.replace('cat ', '').trim();
       const matched = DOTFILES.find(d => d.name.toLowerCase().includes(fileName) || d.path.toLowerCase().includes(fileName));
       if (matched) {
         out = matched.content;
       } else {
-        out = `cat: ${fileName}: No such file or directory. Try 'cat personal_projects' or 'cat future_plans'`;
+        out = `cat: ${fileName}: No such file. Try 'cat hyprland.conf' or 'cat personal_projects.json'`;
       }
     } else if (cmd === 'clear') {
       setTerminalHistory([]);
@@ -100,9 +260,11 @@ export default function AboutSection() {
 
     setTerminalHistory((prev: Array<{ cmd: string; out: string }>) => [...prev, { cmd: terminalInput, out }]);
     setTerminalInput('');
+    playKeyClickSound();
   };
 
   const copyDotfiles = () => {
+    playKeyClickSound();
     navigator.clipboard.writeText(selectedDotfile.content);
     setCopiedText(true);
     setTimeout(() => setCopiedText(false), 2000);
@@ -117,8 +279,8 @@ export default function AboutSection() {
           initial={{ opacity: 0, x: -25 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="lg:col-span-2 bg-card-about border-2 border-deep-rose rounded-2xl p-6 md:p-8 shadow-solid-rose flex flex-col justify-between transform -rotate-1 hover:rotate-0 hover:scale-[1.01] transition-all duration-300"
+          transition={{ duration: 0.4 }}
+          className="lg:col-span-2 bg-card-about border-2 border-deep-rose rounded-2xl p-6 md:p-8 shadow-solid-rose flex flex-col justify-between transform -rotate-1 hover:rotate-0 hover:scale-[1.005] transition-transform duration-200 will-change-transform"
         >
           <div>
             {/* Header */}
@@ -148,7 +310,7 @@ export default function AboutSection() {
               {[
                 { name: 'Fedora Linux', color: 'bg-saffron text-on-surface hover:rotate-2' },
                 { name: 'Hyprland', color: 'bg-terracotta text-white hover:-rotate-1' },
-                { name: 'Music', color: 'bg-deep-rose text-white hover:rotate-1' },
+                { name: 'Apple Music', color: 'bg-red-500 text-white hover:rotate-1' },
                 { name: 'Doing dumb stuff', color: 'bg-turmeric text-on-surface hover:-rotate-2' },
               ].map((item, i) => (
                 <span
@@ -324,6 +486,86 @@ export default function AboutSection() {
         </motion.div>
 
       </div>
+
+      {/* Retro Snake Game Modal Overlay */}
+      <AnimatePresence>
+        {snakeOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+            onClick={() => setSnakeOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              className="bg-card-about border-4 border-black rounded-2xl p-5 max-w-sm w-full shadow-solid-dark text-center relative font-mono text-on-surface"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between pb-3 mb-3 border-b-2 border-dashed border-black/20">
+                <div className="flex items-center gap-2">
+                  <Gamepad2 className="w-5 h-5 text-saffron" />
+                  <h3 className="font-display text-xl uppercase tracking-tighter text-white bg-terracotta px-2 py-0.5 rounded border border-black">
+                    RETRO SNAKE 🐍
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setSnakeOpen(false)}
+                  className="p-1 bg-black text-white hover:bg-red-600 border-2 border-black rounded-full cursor-pointer transition-all"
+                  title="Close Snake Game"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Score Bar */}
+              <div className="flex justify-between items-center text-xs font-bold bg-black/40 p-2 rounded-lg border border-white/10 mb-3 text-cream">
+                <span>SCORE: <span className="text-saffron font-black">{snakeScore}</span></span>
+                <span>HIGH: <span className="text-emerald-400 font-black">{snakeHighScore}</span></span>
+              </div>
+
+              {/* Game Canvas Container */}
+              <div className="relative mx-auto w-[300px] h-[300px] border-2 border-black rounded-xl overflow-hidden shadow-inner bg-[#120b0a]">
+                <canvas ref={canvasRef} width={300} height={300} className="block" />
+
+                {/* Game Over Screen Overlay */}
+                {snakeGameOver && (
+                  <div className="absolute inset-0 bg-black/85 backdrop-blur-xs flex flex-col items-center justify-center p-4 space-y-3">
+                    <div className="text-red-500 font-black text-xl tracking-widest animate-pulse">
+                      GAME OVER 💀
+                    </div>
+                    <p className="text-xs text-gray-300">Final Score: {snakeScore}</p>
+                    <button
+                      onClick={startSnakeGame}
+                      className="px-4 py-2 bg-saffron text-black font-extrabold text-xs uppercase tracking-wider border-2 border-black rounded-xl hover:bg-turmeric transition-all flex items-center gap-2 cursor-pointer shadow-md active:scale-95"
+                    >
+                      <RefreshCw className="w-4 h-4" /> Play Again
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* On-screen Controls for Mobile */}
+              <div className="mt-4 pt-3 border-t border-black/10">
+                <p className="text-[10px] text-dusty-rose mb-2 font-bold uppercase">
+                  CONTROLS: ARROW KEYS OR WASD
+                </p>
+                <div className="grid grid-cols-3 gap-1.5 max-w-[150px] mx-auto sm:hidden">
+                  <div />
+                  <button onClick={() => { if (dirRef.current.y === 0) dirRef.current = { x: 0, y: -1 }; }} className="p-2 bg-black text-white rounded font-bold border border-white/20 active:bg-saffron active:text-black">▲</button>
+                  <div />
+                  <button onClick={() => { if (dirRef.current.x === 0) dirRef.current = { x: -1, y: 0 }; }} className="p-2 bg-black text-white rounded font-bold border border-white/20 active:bg-saffron active:text-black">◀</button>
+                  <button onClick={() => { if (dirRef.current.y === 0) dirRef.current = { x: 0, y: 1 }; }} className="p-2 bg-black text-white rounded font-bold border border-white/20 active:bg-saffron active:text-black">▼</button>
+                  <button onClick={() => { if (dirRef.current.x === 0) dirRef.current = { x: 1, y: 0 }; }} className="p-2 bg-black text-white rounded font-bold border border-white/20 active:bg-saffron active:text-black">▶</button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

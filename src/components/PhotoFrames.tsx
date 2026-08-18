@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Camera, Eye, Download, MapPin, X, ArrowLeft, ArrowRight, Heart, Share2, ZoomIn } from 'lucide-react';
 import { PhotoFrame } from '../types';
-import AnalogSynth from './AnalogSynth';
+import { playShutterSound, playPopSound, playKeyClickSound } from '../utils/soundEffects';
+
 
 const CURATED_FRAMES: PhotoFrame[] = [
   {
@@ -15,52 +16,56 @@ const CURATED_FRAMES: PhotoFrame[] = [
     title: 'Arachnid Alert',
     subtitle: 'Wall Crawler',
     url: 'https://images.unsplash.com/photo-1714631062530-4125f1015137?q=80&w=800&auto=format&fit=crop',
-    views: '500+',
-    downloads: '40+',
+    views: '845',
+    downloads: '41',
     location: 'Inside Your Nightmares, India',
     camera: 'Spooky Snaps',
     settings: 'Available on Unsplash',
     description: 'Spotted a leggy little wall-dweller chilling by the door. Just your casual, multi-legged roommate doing its thing',
-    unsplashUrl: 'https://unsplash.com/photos/9M-Y580a7wE'
+    unsplashUrl: 'https://unsplash.com/photos/9M-Y580a7wE',
+    weirdLore: { vibe: '🕸️ 3:00 AM Jumpscare', weirdFact: 'Taught it how to quit Vim' }
   },
   {
     id: 'frame-2',
     title: 'SUNSET ON A STEM',
     subtitle: 'Neon Nature',
     url: 'https://images.unsplash.com/photo-1694444778778-65f5d412899f?q=80&w=800&auto=format&fit=crop',
-    views: '650+',
-    downloads: '39+',
+    views: '779',
+    downloads: '39',
     location: 'Secret gadern',
     camera: 'Moody Botanicals',
     settings: 'Available on Unsplash',
     description: 'This tiny flower is flexing some serious orange and red gradients to outshine the absolute darkness around it.',
-    unsplashUrl: 'https://unsplash.com/photos/Ti7Fyz5kxf8'
+    unsplashUrl: 'https://unsplash.com/photos/Ti7Fyz5kxf8',
+    weirdLore: { vibe: '🌺 Cyberpunk Botanics', weirdFact: 'Photosynthesizes RGB lights' }
   },
   {
     id: 'frame-3',
     title: 'THE POCKET SHIP',
     subtitle: 'The Micro Voyager',
     url: 'https://images.unsplash.com/photo-1706900961630-33ca9d775443?q=80&w=800&auto=format&fit=crop',
-    views: '33,444+',
-    downloads: '216+',
+    views: '33,444',
+    downloads: '216',
     location: 'Sector 7, Kitchen Table',
     camera: 'The box of treasure',
     settings: 'Available on Unsplash',
     description: 'A sleek teal and black mini cruiser ready to warp through your living room at the speed of imagination.',
-    unsplashUrl: 'https://unsplash.com/photos/a-toy-car-sitting-on-top-of-a-wooden-table-tgz8Eo9qU0w'
+    unsplashUrl: 'https://unsplash.com/photos/a-toy-car-sitting-on-top-of-a-wooden-table-tgz8Eo9qU0w',
+    weirdLore: { vibe: '🏎️ Hot Wheels Warp Drive', weirdFact: 'Zero emissions, runs on nostalgia' }
   },
   {
     id: 'frame-4',
     title: 'THE LONELY GLOW-UP',
     subtitle: 'Solo spark',
     url: 'https://images.unsplash.com/photo-1721498033318-0701c5c00bcf?q=80&w=800&auto=format&fit=crop',
-    views: '440+',
-    downloads: '52+',
+    views: '578',
+    downloads: '52',
     location: 'The Void, Universe',
     camera: 'The flamey flame',
     settings: 'Available on Unsplash',
     description: 'One tiny candle absolutely carrying the team against an entire room full of pure, unadulterated darkness.',
-    unsplashUrl: 'https://unsplash.com/photos/6VQLWVs9qY8'
+    unsplashUrl: 'https://unsplash.com/photos/6VQLWVs9qY8',
+    weirdLore: { vibe: '🕯️ Dark Souls Bonfire', weirdFact: 'Keeps the void bugs away' }
 
   },
   {
@@ -68,13 +73,14 @@ const CURATED_FRAMES: PhotoFrame[] = [
     title: 'THE LONELY PLANT',
     subtitle: 'Spark of joy',
     url: 'https://images.unsplash.com/photo-1745362803735-a32f4998c112?q=80&w=800&auto=format&fit=crop',
-    views: '172+',
-    downloads: '20+',
+    views: '296',
+    downloads: '20',
     location: 'Procrastination Station, Bedroom',
     camera: 'The white in black',
     settings: 'Available on Unsplash',
     description: 'A single lamp fighting for its life to illuminate a desk, a plant, and someone\'s unfinished homework assignments.',
-    unsplashUrl: 'https://unsplash.com/photos/z2Qs7ipL6pc'
+    unsplashUrl: 'https://unsplash.com/photos/z2Qs7ipL6pc',
+    weirdLore: { vibe: '💡 Late Night Coding', weirdFact: 'Listens to lo-fi on repeat' }
 
   }
 ];
@@ -83,60 +89,111 @@ export default function PhotoFrames() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lovedFrames, setLovedFrames] = useState<Record<string, boolean>>({});
+  const [previewIndex, setPreviewIndex] = useState(0);
   const [downloadSuccess, setDownloadSuccess] = useState<string | null>(null);
 
-  // State to track which frame is showing in the polaroid preview card
-  const [previewIndex, setPreviewIndex] = useState(0);
-  const previewFrame = CURATED_FRAMES[previewIndex]!;
+  // Unsplash stats state (auto-updates live from Unsplash API)
+  const [unsplashStats, setUnsplashStats] = useState({
+    views: '249,477+',
+    downloads: '2,293+',
+    photosCount: '40+',
+    ranking: 'Top 25%'
+  });
 
-  // Set a random preview index on mount
-  React.useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * CURATED_FRAMES.length);
-    setPreviewIndex(randomIndex);
+  // Per-photo live stats cache (photoId -> { views, downloads })
+  const [photoStatsMap, setPhotoStatsMap] = useState<Record<string, { views: string; downloads: string }>>({});
+
+  useEffect(() => {
+    const fetchLiveUnsplashStats = async () => {
+      try {
+        const res = await fetch('https://unsplash.com/napi/users/baanbhaba/statistics');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && data.views && data.downloads) {
+          const viewsNum = Number(data.views.total).toLocaleString('en-US');
+          const downloadsNum = Number(data.downloads.total).toLocaleString('en-US');
+          setUnsplashStats({
+            views: `${viewsNum}`,
+            downloads: `${downloadsNum}`,
+            photosCount: '40+',
+            ranking: 'Top 25%'
+          });
+        }
+      } catch {
+        // Keeps fallback stats if network is offline
+      }
+    };
+
+    fetchLiveUnsplashStats();
   }, []);
 
-  const handleRollRandom = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    let nextIndex;
-    do {
-      nextIndex = Math.floor(Math.random() * CURATED_FRAMES.length);
-    } while (nextIndex === previewIndex && CURATED_FRAMES.length > 1);
-    setPreviewIndex(nextIndex);
-  };
+  // Fetch per-photo live statistics when lightbox is opened / photo changed
+  useEffect(() => {
+    const activePhoto = CURATED_FRAMES[currentIndex];
+    if (!activePhoto || !activePhoto.unsplashUrl) return;
 
-  const activeFrame = CURATED_FRAMES[currentIndex]!;
+    // Extract photo slug from unsplashUrl (e.g. "https://unsplash.com/photos/9M-Y580a7wE" -> "9M-Y580a7wE")
+    const parts = activePhoto.unsplashUrl.split('/photos/');
+    const slug = parts[1]?.trim();
+    if (!slug || photoStatsMap[slug]) return;
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % CURATED_FRAMES.length);
+    const fetchSinglePhotoStats = async () => {
+      try {
+        const res = await fetch(`https://unsplash.com/napi/photos/${slug}/statistics`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && data.views && data.downloads) {
+          const v = Number(data.views.total).toLocaleString('en-US');
+          const d = Number(data.downloads.total).toLocaleString('en-US');
+          setPhotoStatsMap((prev) => ({
+            ...prev,
+            [slug]: { views: v, downloads: d }
+          }));
+        }
+      } catch {
+        // Keeps frame default fallback
+      }
+    };
+
+    fetchSinglePhotoStats();
+  }, [currentIndex]);
+
+  const handleRollRandom = () => {
+    playKeyClickSound();
+    let nextIdx = Math.floor(Math.random() * CURATED_FRAMES.length);
+    if (nextIdx === previewIndex) {
+      nextIdx = (previewIndex + 1) % CURATED_FRAMES.length;
+    }
+    setPreviewIndex(nextIdx);
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + CURATED_FRAMES.length) % CURATED_FRAMES.length);
+    playShutterSound();
+    setCurrentIndex((prev) => (prev === 0 ? CURATED_FRAMES.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    playShutterSound();
+    setCurrentIndex((prev) => (prev === CURATED_FRAMES.length - 1 ? 0 : prev + 1));
   };
 
   const toggleLove = (id: string) => {
-    setLovedFrames(prev => ({ ...prev, [id]: !prev[id] }));
+    playPopSound();
+    setLovedFrames((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const triggerDownload = (id: string) => {
-    setDownloadSuccess(id);
-    setTimeout(() => {
-      setDownloadSuccess(null);
-    }, 2500);
-  };
+  const activeFrame = CURATED_FRAMES[currentIndex]!;
+  const previewFrame = CURATED_FRAMES[previewIndex]!;
 
   return (
-    <section id="photography" className="py-12 px-4 md:px-8 max-w-7xl mx-auto">
-      {/* Grid Container for Card Row (Left: Frames, Right: Music in Next Component) */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-stretch">
-        
-        {/* Card 3: /FRAMES (60% width on large screens) */}
+    <section id="photography" className="py-6 px-4 md:px-8 max-w-7xl mx-auto">
+        {/* Card 3: /FRAMES */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="lg:col-span-3 bg-cream border-2 border-turmeric rounded-2xl p-5 md:p-6 shadow-solid-rose flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden transform -rotate-1 hover:rotate-0 hover:scale-[1.01] transition-all duration-300"
+          className="w-full bg-cream border-2 border-turmeric rounded-2xl p-5 md:p-8 shadow-solid-rose flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden transform -rotate-1 hover:rotate-0 hover:scale-[1.005] transition-transform duration-200 will-change-transform"
         >
           {/* Saffron design diamond background decoration */}
           <div className="absolute top-[-25px] left-[-25px] opacity-10">
@@ -151,19 +208,32 @@ export default function PhotoFrames() {
                   /FRAMES
                 </h2>
               </div>
-              <p className="font-mono text-xs font-bold tracking-widest text-deep-rose">
-                242,936+ VIEWS | 2,250+ DOWNLOADS | Dont matter tho....
-              </p>
+
+              {/* Rich Unsplash Metrics Bar */}
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <div className="flex items-center gap-1.5 bg-black/5 px-3 py-1 rounded-lg border border-black/10 font-mono text-xs text-on-surface font-bold">
+                  <Eye className="w-3.5 h-3.5 text-terracotta" />
+                  <span>{unsplashStats.views} Views</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-black/5 px-3 py-1 rounded-lg border border-black/10 font-mono text-xs text-on-surface font-bold">
+                  <Download className="w-3.5 h-3.5 text-deep-rose" />
+                  <span>{unsplashStats.downloads} Downloads</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-saffron/20 text-black px-2.5 py-1 rounded-lg border border-saffron/40 font-mono text-[11px] font-black">
+                  <span>🏆 {unsplashStats.ranking} Contributor</span>
+                </div>
+              </div>
             </div>
 
-            <blockquote className="font-serif italic text-base md:text-lg text-on-surface leading-relaxed">
-              "Top 25% of contributors on Unsplash. Used in Notion, PicsArt, etc."
+            <blockquote className="font-serif italic text-base md:text-lg text-on-surface leading-relaxed pt-1">
+              "Top 25% of contributors on Unsplash. Used in Notion, PicsArt, & blogs worldwide."
             </blockquote>
 
             {/* View Gallery Action Buttons */}
             <div className="pt-2 flex flex-wrap gap-3">
               <button
                 onClick={() => {
+                  playShutterSound();
                   setCurrentIndex(previewIndex);
                   setLightboxOpen(true);
                 }}
@@ -177,6 +247,7 @@ export default function PhotoFrames() {
                 href="https://unsplash.com/@baanbhaba"
                 target="_blank"
                 rel="noreferrer"
+                onClick={() => playKeyClickSound()}
                 className="bg-white text-black font-sans font-extrabold text-xs tracking-wider px-5 py-3 rounded-lg border-2 border-black hover:bg-gray-100 hover:shadow-solid-dark transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-sm"
               >
                 <span>📸</span>
@@ -189,21 +260,24 @@ export default function PhotoFrames() {
           <div className="flex flex-col items-center gap-3 z-10">
             <motion.div
               onClick={() => {
+                playShutterSound();
                 setCurrentIndex(previewIndex);
                 setLightboxOpen(true);
               }}
-              whileHover={{ scale: 1.05, rotate: -2 }}
-              className="w-48 h-64 md:w-52 md:h-72 bg-white p-2.5 pb-6 rounded shadow-md border border-gray-200 transform rotate-2 cursor-pointer transition-all duration-300 flex-shrink-0 relative"
-              title="Click to view full image"
+              whileHover={{ scale: 1.03 }}
+              className="w-48 h-64 md:w-52 md:h-72 bg-white p-2.5 pb-6 rounded shadow-md border border-gray-200 transform rotate-2 cursor-pointer transition-transform duration-200 flex-shrink-0 relative will-change-transform"
+              title="click to inspect photo in high res 📸"
             >
               <div className="w-full h-[85%] bg-gray-100 rounded overflow-hidden relative">
                 <img
                   src={previewFrame.url}
                   alt={previewFrame.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover grayscale-15 contrast-105"
                   referrerPolicy="no-referrer"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
                 <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white p-1 rounded-full border border-white/20">
                   <ZoomIn className="w-3.5 h-3.5" />
                 </div>
@@ -223,161 +297,176 @@ export default function PhotoFrames() {
           </div>
         </motion.div>
 
-        <AnalogSynth />
-      </div>
-
-      {/* Lightbox Modal */}
+      {/* Enlarged Gallery Lightbox Modal */}
       <AnimatePresence>
         {lightboxOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-[#120b0a]/95 backdrop-blur-md flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-[#120b0a]/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-6"
+            onClick={() => setLightboxOpen(false)}
           >
-            {/* Outer Box */}
+            {/* Outer Widescreen Box */}
             <motion.div
               initial={{ scale: 0.95, y: 15 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 15 }}
-              className="bg-cream border-4 border-black rounded-2xl w-full max-w-2xl overflow-y-auto max-h-[90vh] shadow-solid-dark relative"
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              className="bg-cream border-4 border-black rounded-2xl w-full max-w-5xl max-h-[92vh] shadow-solid-dark relative overflow-hidden flex flex-col lg:flex-row"
             >
-              {/* Image Banner Section (Image is top-level part of scroll) */}
-              <div className="relative w-full bg-[#120b0a] flex items-center justify-center select-none overflow-hidden border-b-2 border-black">
+              {/* Left Column: Image Viewer */}
+              <div className="lg:w-7/12 bg-[#120b0a] relative flex items-center justify-center min-h-[300px] sm:min-h-[420px] select-none border-b-4 lg:border-b-0 lg:border-r-4 border-black">
                 <img
                   src={activeFrame.url}
                   alt={activeFrame.title}
-                  className="w-full h-auto max-h-[480px] object-contain block mx-auto"
+                  className="w-full h-full max-h-[60vh] lg:max-h-[85vh] object-contain block mx-auto p-4"
                   referrerPolicy="no-referrer"
                 />
 
-                {/* Left Arrow */}
+                {/* Left Navigation Arrow */}
                 <button
                   onClick={(e: React.MouseEvent<HTMLButtonElement>) => { e.stopPropagation(); handlePrev(); }}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 p-2 bg-black/60 hover:bg-black/85 border border-white/20 rounded-full text-white cursor-pointer transition-colors z-20"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 bg-black/75 hover:bg-saffron hover:text-black border-2 border-black rounded-full text-white cursor-pointer transition-all z-20 shadow-md active:scale-95"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
 
-                {/* Right Arrow */}
+                {/* Right Navigation Arrow */}
                 <button
                   onClick={(e: React.MouseEvent<HTMLButtonElement>) => { e.stopPropagation(); handleNext(); }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-black/60 hover:bg-black/85 border border-white/20 rounded-full text-white cursor-pointer transition-colors z-20"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 bg-black/75 hover:bg-saffron hover:text-black border-2 border-black rounded-full text-white cursor-pointer transition-all z-20 shadow-md active:scale-95"
                 >
                   <ArrowRight className="w-5 h-5" />
                 </button>
-
-                <div className="absolute top-3 left-3 bg-black/75 text-[10px] font-mono text-white px-2 py-1 rounded border border-white/15 z-20">
-                  {currentIndex + 1} / {CURATED_FRAMES.length}
-                </div>
               </div>
 
-              {/* Hand-Painted Metadata Info Panel immediately below, scrolling together */}
-              <div className="p-6 md:p-8 space-y-6">
-                {/* Title */}
-                <div className="flex items-start justify-between gap-4">
+              {/* Right Column: Metadata & Thumbnail Reel */}
+              <div className="lg:w-5/12 p-5 sm:p-6 flex flex-col justify-between overflow-y-auto max-h-[50vh] lg:max-h-[92vh] space-y-4">
+                <div className="space-y-4">
+                  {/* Title & Favorite Header */}
+                  <div className="flex items-start justify-between gap-3 pb-3 border-b border-black/10 pr-10">
+                    <div>
+                      <h3 className="font-display text-2xl sm:text-3xl text-terracotta leading-tight uppercase">
+                        {activeFrame.title}
+                      </h3>
+                      <p className="font-serif italic text-xs sm:text-sm text-deep-rose mt-0.5">
+                        {activeFrame.subtitle}
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => toggleLove(activeFrame.id)}
+                      className="p-2 rounded-xl hover:bg-black/5 border-2 border-black bg-white transition-all cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5"
+                      title={lovedFrames[activeFrame.id] ? "unlove photo 💔" : "drop a heart 💖"}
+                    >
+                      <Heart
+                        className={`w-5 h-5 transition-colors ${
+                          lovedFrames[activeFrame.id] ? 'fill-red-500 text-red-500' : 'text-black'
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Description */}
+                  <p className="font-sans text-xs sm:text-sm text-on-surface leading-relaxed font-medium">
+                    {activeFrame.description}
+                  </p>
+
+                  {/* Badges/Info Cards */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div className="bg-surface border-2 border-black rounded-xl p-3 shadow-solid-dark">
+                      <span className="font-mono text-[9px] tracking-widest text-indigo-blue uppercase font-black block mb-1">
+                        LOCATION
+                      </span>
+                      <div className="flex items-center gap-1.5 font-bold text-on-surface truncate">
+                        <MapPin className="w-3.5 h-3.5 text-terracotta shrink-0" />
+                        <span className="truncate">{activeFrame.location}</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-surface border-2 border-black rounded-xl p-3 shadow-solid-dark">
+                      <span className="font-mono text-[9px] tracking-widest text-indigo-blue uppercase font-black block mb-1">
+                        PHOTO LORE & VIBE
+                      </span>
+                      {activeFrame.weirdLore && (
+                        <div className="space-y-1.5 mt-1 font-mono text-[10px] font-black">
+                          <span className="inline-block bg-saffron/30 text-black px-2.5 py-1 rounded border border-black/20 font-bold">
+                            {activeFrame.weirdLore.vibe}
+                          </span>
+                          <p className="bg-black/5 text-gray-800 italic px-2.5 py-1.5 rounded border border-black/10 font-sans text-xs leading-snug">
+                            💡 <span className="font-bold">Lore:</span> {activeFrame.weirdLore.weirdFact}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Live Photo Stats Bar */}
+                  {(() => {
+                    const slug = activeFrame.unsplashUrl?.split('/photos/')[1]?.trim() || '';
+                    const liveStats = photoStatsMap[slug];
+                    const displayViews = liveStats ? `${liveStats.views}` : activeFrame.views;
+                    const displayDownloads = liveStats ? `${liveStats.downloads}` : activeFrame.downloads;
+                    return (
+                      <div className="flex items-center justify-between p-3 bg-black/5 border border-black/10 rounded-xl font-mono text-xs text-gray-700 font-bold">
+                        <span className="flex items-center gap-1.5">
+                          <Eye className="w-3.5 h-3.5 text-indigo-blue" />
+                          {displayViews} Views {liveStats && <span className="text-[9px] text-emerald-600 font-black">LIVE</span>}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <Download className="w-3.5 h-3.5 text-indigo-blue" />
+                          {displayDownloads} Downloads {liveStats && <span className="text-[9px] text-emerald-600 font-black">LIVE</span>}
+                        </span>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Thumbnail Quick Selector Reel */}
                   <div>
-                    <h3 className="font-display text-3xl md:text-4xl text-terracotta leading-none uppercase">
-                      {activeFrame.title}
-                    </h3>
-                    <p className="font-serif italic text-sm text-deep-rose mt-1">
-                      {activeFrame.subtitle}
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => toggleLove(activeFrame.id)}
-                    className="p-2 rounded-full hover:bg-black/5 border-2 border-black bg-white transition-all cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-[0px_0px_0px_0px_rgba(0,0,0,1)]"
-                  >
-                    <Heart
-                      className={`w-5 h-5 transition-colors ${
-                        lovedFrames[activeFrame.id] ? 'fill-red-500 text-red-500' : 'text-black'
-                      }`}
-                    />
-                  </button>
-                </div>
-
-                {/* Description */}
-                <p className="font-sans text-sm md:text-base text-on-surface leading-relaxed font-semibold">
-                  {activeFrame.description}
-                </p>
-
-                {/* Badges/Info Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="bg-surface border-2 border-black rounded-xl p-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                    <span className="font-mono text-[9px] tracking-widest text-indigo-blue uppercase font-black block mb-1">
-                      LOCATION
+                    <span className="font-mono text-[10px] font-bold text-dusty-rose uppercase tracking-wider block mb-2">
+                      GALLERY THUMBNAILS:
                     </span>
-                    <div className="flex items-center gap-1.5">
-                      <MapPin className="w-4 h-4 text-terracotta" />
-                      <span className="font-sans font-bold text-sm text-on-surface">{activeFrame.location}</span>
-                    </div>
-                  </div>
-
-                  <div className="bg-surface border-2 border-black rounded-xl p-4 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-                    <span className="font-mono text-[9px] tracking-widest text-indigo-blue uppercase font-black block mb-1">
-                      PHOTOGRAPHY DETAILS
-                    </span>
-                    <div className="font-sans font-bold text-sm text-on-surface">
-                      {activeFrame.camera} · {activeFrame.settings}
+                    <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                      {CURATED_FRAMES.map((frame, index) => (
+                        <button
+                          key={frame.id}
+                          onClick={() => {
+                            playShutterSound();
+                            setCurrentIndex(index);
+                          }}
+                          className={`w-12 h-12 rounded-lg border-2 overflow-hidden shrink-0 transition-all cursor-pointer ${
+                            currentIndex === index
+                              ? 'border-saffron scale-105 shadow-md'
+                              : 'border-black/20 opacity-60 hover:opacity-100'
+                          }`}
+                        >
+                          <img src={frame.url} alt={frame.title} className="w-full h-full object-cover" />
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>
 
-                {/* Stats Bar */}
-                <div className="flex items-center justify-between p-3.5 bg-black/[0.02] border-2 border-dashed border-black/15 rounded-xl font-mono text-xs text-gray-600">
-                  <span className="flex items-center gap-1.5 font-bold">
-                    <Eye className="w-4 h-4 text-indigo-blue" />
-                    {activeFrame.views} Views
-                  </span>
-                  <span className="flex items-center gap-1.5 font-bold">
-                    <Download className="w-4 h-4 text-indigo-blue" />
-                    {activeFrame.downloads} Downloads
-                  </span>
-                </div>
-
-                {/* Footer Buttons / Downloads */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                
-
-                { /*  <button
-                    onClick={() => triggerDownload(activeFrame.id)}
-                    className="w-full py-3 bg-saffron text-black font-sans font-black text-xs uppercase tracking-wider border-2 border-black rounded-xl hover:bg-turmeric transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
-                  >
-                    <Download className="w-4 h-4" />
-                    {downloadSuccess === activeFrame.id ? 'Saved with Pride!' : 'Download Frame (High Res)'}
-          
-
-
-
-                </button>    */} 
-
+                {/* External Action */}
+                <div className="pt-2">
                   <a
                     href={activeFrame.unsplashUrl || "https://unsplash.com/@baanbhaba"}
                     target="_blank"
                     rel="noreferrer"
-                    className="w-full py-3 bg-white text-black font-sans font-black text-xs uppercase tracking-wider border-2 border-black rounded-xl hover:bg-gray-50 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] text-center"
+                    className="w-full py-2.5 bg-saffron text-black font-sans font-black text-xs uppercase tracking-wider border-2 border-black rounded-xl hover:bg-turmeric transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 text-center"
                   >
                     <span>📸</span>
-                    {activeFrame.unsplashUrl ? 'View Photo on Unsplash' : 'See @baanbhaba on Unsplash'}
+                    {activeFrame.unsplashUrl ? 'Open Original on Unsplash' : 'See @baanbhaba on Unsplash'}
                   </a>
                 </div>
-
-                {downloadSuccess === activeFrame.id && (
-                  <motion.p
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-xs font-mono text-center text-emerald-600 font-black"
-                  >
-                    ✓ Download started. Saved to local gallery.
-                  </motion.p>
-                )}
               </div>
 
-              {/* Close Button */}
+              {/* Floating Close Button */}
               <button
                 onClick={() => setLightboxOpen(false)}
-                className="absolute top-4 right-4 p-2 bg-black hover:bg-red-700 border-2 border-black text-white rounded-full transition-all cursor-pointer shadow-md z-30"
+                className="absolute top-3 right-3 p-2 bg-black hover:bg-red-600 border-2 border-black text-white rounded-full transition-all cursor-pointer shadow-md z-30"
+                title="Close enlarge window"
               >
                 <X className="w-4 h-4" />
               </button>

@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-import me from './me.png';
+import me from './blackme.png';
 import React from 'react';
 import { motion } from 'motion/react';
 import { Compass, Sparkles, MapPin } from 'lucide-react';
@@ -15,7 +15,7 @@ export default function Hero() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative bg-cream border-2 border-turmeric rounded-2xl p-6 md:p-12 shadow-solid-indigo flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-12 overflow-hidden transform -rotate-1 hover:rotate-0 hover:scale-[1.01] transition-all duration-300"
+        className="relative bg-cream border-2 border-turmeric rounded-2xl p-6 md:p-12 shadow-solid-indigo flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-12 overflow-hidden transform -rotate-1 hover:rotate-0 hover:scale-[1.005] transition-transform duration-200 will-change-transform"
       >
         {/* Background Geometric Kolam Watermark */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-5 flex items-center justify-center">

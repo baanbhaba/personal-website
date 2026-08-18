@@ -15,6 +15,10 @@ export interface PhotoFrame {
   settings: string;
   description: string;
   unsplashUrl?: string;
+  weirdLore?: {
+    vibe?: string;
+    weirdFact?: string;
+  };
 }
 
 export interface GuestbookMessage {
