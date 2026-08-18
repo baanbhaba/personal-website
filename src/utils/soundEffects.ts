@@ -27,10 +27,12 @@ const createAudioPool = (src: string, count = 4) => {
 const clickPool = createAudioPool('/click.wav');
 const shutterPool = createAudioPool('/shutter.wav');
 const popPool = createAudioPool('/pop.wav');
+const meowPool = createAudioPool('/meow.ogg');
 
 let clickIdx = 0;
 let shutterIdx = 0;
 let popIdx = 0;
+let meowIdx = 0;
 
 const playFromPool = (pool: HTMLAudioElement[], getIdx: () => number, setIdx: (n: number) => void) => {
   if (soundMuted || !pool.length) return;
@@ -53,4 +55,8 @@ export const playShutterSound = () => {
 
 export const playPopSound = () => {
   playFromPool(popPool, () => popIdx, (n) => { popIdx = n; });
+};
+
+export const playMeowSound = () => {
+  playFromPool(meowPool, () => meowIdx, (n) => { meowIdx = n; });
 };

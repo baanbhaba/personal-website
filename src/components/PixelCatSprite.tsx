@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { playPopSound } from '../utils/soundEffects';
+import { playMeowSound } from '../utils/soundEffects';
 
 interface PixelCatSpriteProps {
   mouseX: number;
@@ -20,7 +20,6 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
       setCatPos((prev) => {
         const dx = mouseX - prev.x;
         const dy = mouseY - prev.y;
-        const dist = Math.hypot(dx, dy);
 
         // Target offset (sit 35px next to cursor)
         const targetX = mouseX + (dx < 0 ? 30 : -30);
@@ -63,7 +62,7 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
   }, [isMoving]);
 
   const handleMeow = () => {
-    playPopSound();
+    playMeowSound();
     const barks = ["meow! 🐾", "purrrr~ 😺", "feed rice! 🍚", "hyprland! ⚡", "miau! ✨", "following u 👀"];
     setMeowText(barks[Math.floor(Math.random() * barks.length)] || "meow! 🐾");
     setTimeout(() => setMeowText(null), 2000);
