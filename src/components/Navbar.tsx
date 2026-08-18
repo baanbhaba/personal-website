@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles, MessageCircle, FileText, Volume2, VolumeX, Music, Disc, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { playKeyClickSound, setSoundMuted } from '../utils/soundEffects';
+import { playKeyClickSound, playPopSound, setSoundMuted } from '../utils/soundEffects';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -204,6 +204,36 @@ export default function Navbar() {
           )}
         </AnimatePresence>
       </nav>
+
+      {/* Floating Pixel Cat Companion Sprite (Bottom Left) */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="fixed bottom-5 left-5 z-40"
+      >
+        <div className="relative group">
+          {/* Interactive Speech Bubble */}
+          <div className="absolute bottom-14 left-0 bg-white border-2 border-black rounded-xl px-3 py-1.5 shadow-solid-dark opacity-0 group-hover:opacity-100 transition-all pointer-events-none whitespace-nowrap font-mono text-[11px] font-black text-black z-50 transform -translate-y-1">
+            <span>meow! ~ feeding your rice 🐾</span>
+            <div className="absolute -bottom-2 left-4 w-3 h-3 bg-white border-r-2 border-b-2 border-black transform rotate-45" />
+          </div>
+
+          {/* Floating Pixel Cat Sprite */}
+          <motion.div
+            animate={{ y: [0, -6, 0] }}
+            transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+            onClick={() => playPopSound()}
+            className="w-12 h-12 rounded-xl bg-saffron/20 border-2 border-black p-1 shadow-solid-dark cursor-pointer flex items-center justify-center hover:scale-110 active:scale-95 transition-all bg-cream"
+            title="your pixel cat companion 🐾 (click for pop!)"
+          >
+            <img
+              src="/cat_companion.png"
+              alt="Pixel Cat Companion"
+              className="w-full h-full object-contain image-rendering-pixelated"
+            />
+          </motion.div>
+        </div>
+      </motion.div>
 
       {/* Floating Lo-Fi Audio Player Widget (Bottom Right) */}
       <motion.div
