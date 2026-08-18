@@ -149,7 +149,7 @@ export default function Guestbook() {
                 </span>
                 <ArrowUpRight className="w-5 h-5 opacity-40 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
               </div>
-              <div className="mt-6 w-full">
+              <div className="mt-6 w-full text-right sm:text-left">
                 <span className="font-mono text-[9px] tracking-wider font-bold block opacity-60 uppercase">
                   {link.label}
                 </span>

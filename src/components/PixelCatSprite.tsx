@@ -55,29 +55,6 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
     return () => cancelAnimationFrame(animId);
   }, [mouseX, mouseY, facingLeft]);
 
-  // Touch screen listener for mobile devices
-  useEffect(() => {
-    const handleTouch = (e: TouchEvent) => {
-      if (e.touches && e.touches[0]) {
-        const touch = e.touches[0];
-        const current = catPosRef.current;
-        current.x = touch.clientX;
-        current.y = touch.clientY - 25;
-        if (containerRef.current) {
-          containerRef.current.style.transform = `translate3d(${current.x}px, ${current.y}px, 0) translate(-50%, -50%)`;
-        }
-      }
-    };
-
-    window.addEventListener('touchmove', handleTouch, { passive: true });
-    window.addEventListener('touchstart', handleTouch, { passive: true });
-
-    return () => {
-      window.removeEventListener('touchmove', handleTouch);
-      window.removeEventListener('touchstart', handleTouch);
-    };
-  }, []);
-
   const handleMeow = () => {
     playMeowSound();
     const barks = ["meow! 🐾", "purrrr~ 😺", "feed rice! 🍚", "linux! ⚡", "miau! ✨", "following u 👀"];
@@ -85,13 +62,16 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
     setTimeout(() => setMeowText(null), 2200);
   };
 
-  // Periodic random meow sound & speech bubble trigger (14s to 26s interval)
+  // Periodic random meow sound & speech bubble trigger (14s to 26s interval, desktop only)
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
     let timer: any = null;
     const scheduleNextRandomMeow = () => {
       const randomDelay = Math.floor(Math.random() * 12000) + 14000;
       timer = setTimeout(() => {
-        handleMeow();
+        if (window.innerWidth >= 768) {
+          handleMeow();
+        }
         scheduleNextRandomMeow();
       }, randomDelay);
     };
@@ -114,7 +94,7 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
         pointerEvents: 'none',
         willChange: 'transform'
       }}
-      className="block select-none"
+      className="hidden md:block select-none"
     >
       <div className="relative pointer-events-auto cursor-pointer" onClick={handleMeow}>
         {/* Meow Speech Bubble */}
