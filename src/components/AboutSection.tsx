@@ -60,11 +60,12 @@ decoration {
     name: 'future_plans.md',
     path: '~/docs/future_plans.md',
     language: 'markdown',
-    content: `# Roadmap
+    content: `# Future Roadmap 🚀
 - [x] Build personal retro portfolio website
 - [x] Unsplash stats API integration
-- [ ] Add more Linux dotfiles & Hyprland themes
-- [ ] Build custom Neovim plugin`
+- [ ] Build CLI games 🎮
+- [ ] Build something related to Palantir 🔮
+- [ ] Add more Linux dotfiles & Hyprland themes`
   }
 ];
 

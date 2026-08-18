@@ -287,11 +287,12 @@ decoration {
     "stack": ["Bash", "Hyprland", "Waybar"],
     "status": "Maintained"
   }
-]`},{name:"future_plans.md",path:"~/docs/future_plans.md",language:"markdown",content:`# Roadmap
+]`},{name:"future_plans.md",path:"~/docs/future_plans.md",language:"markdown",content:`# Future Roadmap 🚀
 - [x] Build personal retro portfolio website
 - [x] Unsplash stats API integration
-- [ ] Add more Linux dotfiles & Hyprland themes
-- [ ] Build custom Neovim plugin`}];function q3(){const[a,l]=q.useState("terminal"),[r,o]=q.useState(rc[0]),[c,h]=q.useState(""),[d,m]=q.useState(!1),[v,p]=q.useState(0),[b,x]=q.useState(0),[S,E]=q.useState(!1),N=q.useRef(null),_=q.useRef([{x:10,y:10}]),R=q.useRef({x:15,y:15}),V=q.useRef({x:1,y:0}),G=q.useRef(null),[Y,L]=q.useState([{cmd:"whoami",out:"anirbaan haldar"},{cmd:"fastfetch",out:`        ,\`''''.    OS ➜ Fedora EVERYTHING 
+- [ ] Build CLI games 🎮
+- [ ] Build something related to Palantir 🔮
+- [ ] Add more Linux dotfiles & Hyprland themes`}];function q3(){const[a,l]=q.useState("terminal"),[r,o]=q.useState(rc[0]),[c,h]=q.useState(""),[d,m]=q.useState(!1),[v,p]=q.useState(0),[b,x]=q.useState(0),[S,E]=q.useState(!1),N=q.useRef(null),_=q.useRef([{x:10,y:10}]),R=q.useRef({x:15,y:15}),V=q.useRef({x:1,y:0}),G=q.useRef(null),[Y,L]=q.useState([{cmd:"whoami",out:"anirbaan haldar"},{cmd:"fastfetch",out:`        ,\`''''.    OS ➜ Fedora EVERYTHING 
        |   ,.  |   KER ➜  Linux - stable one
        |  |  '_'   UP  ➜ No Idea 
  ,....|  |..       MEM ➜ 20$ worth
