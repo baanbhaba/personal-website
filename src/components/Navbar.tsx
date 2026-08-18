@@ -226,7 +226,7 @@ export default function Navbar() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-cream border-t-2 border-dashed border-black/20 px-6 py-5 shadow-lg space-y-3 overflow-hidden"
+              className="md:hidden bg-cream border-t-2 border-dashed border-black/20 px-6 py-5 shadow-lg space-y-3 overflow-hidden text-right"
             >
               {NAV_LINKS.map((link) =>
                 link.external ? (
@@ -239,7 +239,7 @@ export default function Navbar() {
                       playKeyClickSound();
                       setMobileMenuOpen(false);
                     }}
-                    className="block font-sans text-base font-extrabold tracking-wider text-terracotta hover:text-deep-rose py-2 border-b border-black/5"
+                    className="block font-sans text-base font-extrabold tracking-wider text-terracotta hover:text-deep-rose py-2 border-b border-black/5 text-right"
                   >
                     {link.label}
                   </a>
@@ -247,7 +247,7 @@ export default function Navbar() {
                   <button
                     key={link.label}
                     onClick={() => scrollToSection(link.target)}
-                    className="block w-full text-left font-sans text-base font-extrabold tracking-wider text-terracotta hover:text-deep-rose py-2 border-b border-black/5"
+                    className="block w-full text-right font-sans text-base font-extrabold tracking-wider text-terracotta hover:text-deep-rose py-2 border-b border-black/5"
                   >
                     {link.label}
                   </button>

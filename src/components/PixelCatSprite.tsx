@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { playMeowSound } from '../utils/soundEffects';
 
@@ -8,95 +8,64 @@ interface PixelCatSpriteProps {
 }
 
 export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) {
-  const [catPos, setCatPos] = useState({ x: 100, y: 100 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const catPosRef = useRef({ x: 100, y: 100 });
   const [facingLeft, setFacingLeft] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
-  const [walkFrame, setWalkFrame] = useState(0);
   const [meowText, setMeowText] = useState<string | null>(null);
 
-  // Smooth lerp follower logic
+  // Smooth 60fps direct DOM animation loop with requestAnimationFrame
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCatPos((prev) => {
-        const dx = mouseX - prev.x;
-        const dy = mouseY - prev.y;
+    let animId: number;
 
-        // Target offset (sit 30px next to cursor)
-        const targetX = mouseX + (dx < 0 ? 30 : -30);
-        const targetY = mouseY + 15;
+    const updatePosition = () => {
+      const current = catPosRef.current;
+      const dx = mouseX - current.x;
+      const dy = mouseY - current.y;
 
-        const moveDx = targetX - prev.x;
-        const moveDy = targetY - prev.y;
-        const moveDist = Math.hypot(moveDx, moveDy);
+      // Target offset: 30px to the side of the cursor
+      const targetX = mouseX + (dx < 0 ? 35 : -35);
+      const targetY = mouseY + 15;
 
-        if (moveDist > 5) {
-          setIsMoving(true);
-          if (moveDx < -2) setFacingLeft(true);
-          if (moveDx > 2) setFacingLeft(false);
+      const moveDx = targetX - current.x;
+      const moveDy = targetY - current.y;
+      const moveDist = Math.hypot(moveDx, moveDy);
 
-          return {
-            x: prev.x + moveDx * 0.12,
-            y: prev.y + moveDy * 0.12
-          };
-        } else {
-          setIsMoving(false);
-          return prev;
+      if (moveDist > 4) {
+        current.x += moveDx * 0.12;
+        current.y += moveDy * 0.12;
+
+        if (containerRef.current) {
+          containerRef.current.style.transform = `translate3d(${current.x}px, ${current.y}px, 0) translate(-50%, -50%)`;
         }
-      });
-    }, 1000 / 60);
 
-    return () => clearInterval(interval);
-  }, [mouseX, mouseY]);
+        setIsMoving(true);
 
-  // Walk animation cycle
-  useEffect(() => {
-    if (!isMoving) {
-      setWalkFrame(0);
-      return;
-    }
-    const timer = setInterval(() => {
-      setWalkFrame((f) => (f + 1) % 4);
-    }, 120);
+        // Hysteresis threshold to prevent direction jitter
+        if (moveDx < -8 && !facingLeft) setFacingLeft(true);
+        if (moveDx > 8 && facingLeft) setFacingLeft(false);
+      } else {
+        setIsMoving(false);
+      }
 
-    return () => clearInterval(timer);
-  }, [isMoving]);
-
-  const handleMeow = () => {
-    playMeowSound();
-    const barks = ["meow! 🐾", "purrrr~ 😺", "feed rice! 🍚", "linux! ⚡", "miau! ✨", "following u 👀"];
-    setMeowText(barks[Math.floor(Math.random() * barks.length)] || "meow! 🐾");
-    setTimeout(() => setMeowText(null), 2200);
-  };
-
-  // Periodic random meow sound & speech bubble trigger (12s to 24s interval)
-  useEffect(() => {
-    let timer: any = null;
-    const scheduleNextRandomMeow = () => {
-      const randomDelay = Math.floor(Math.random() * 12000) + 12000;
-      timer = setTimeout(() => {
-        handleMeow();
-        scheduleNextRandomMeow();
-      }, randomDelay);
+      animId = requestAnimationFrame(updatePosition);
     };
 
-    scheduleNextRandomMeow();
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, []);
-
-  // Paw animation offset based on walk frame
-  const pawOffsetLeft = isMoving ? (walkFrame % 2 === 0 ? -2 : 2) : 0;
-  const pawOffsetRight = isMoving ? (walkFrame % 2 === 1 ? -2 : 2) : 0;
-  const tailAngle = isMoving ? (walkFrame % 2 === 0 ? 15 : -15) : 0;
+    animId = requestAnimationFrame(updatePosition);
+    return () => cancelAnimationFrame(animId);
+  }, [mouseX, mouseY, facingLeft]);
 
   // Touch screen listener for mobile devices
   useEffect(() => {
     const handleTouch = (e: TouchEvent) => {
       if (e.touches && e.touches[0]) {
         const touch = e.touches[0];
-        setCatPos({ x: touch.clientX, y: touch.clientY - 25 });
-        setIsMoving(true);
+        const current = catPosRef.current;
+        current.x = touch.clientX;
+        current.y = touch.clientY - 25;
+        if (containerRef.current) {
+          containerRef.current.style.transform = `translate3d(${current.x}px, ${current.y}px, 0) translate(-50%, -50%)`;
+        }
       }
     };
 
@@ -109,15 +78,41 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
     };
   }, []);
 
+  const handleMeow = () => {
+    playMeowSound();
+    const barks = ["meow! 🐾", "purrrr~ 😺", "feed rice! 🍚", "linux! ⚡", "miau! ✨", "following u 👀"];
+    setMeowText(barks[Math.floor(Math.random() * barks.length)] || "meow! 🐾");
+    setTimeout(() => setMeowText(null), 2200);
+  };
+
+  // Periodic random meow sound & speech bubble trigger (14s to 26s interval)
+  useEffect(() => {
+    let timer: any = null;
+    const scheduleNextRandomMeow = () => {
+      const randomDelay = Math.floor(Math.random() * 12000) + 14000;
+      timer = setTimeout(() => {
+        handleMeow();
+        scheduleNextRandomMeow();
+      }, randomDelay);
+    };
+
+    scheduleNextRandomMeow();
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       style={{
         position: 'fixed',
-        left: `${catPos.x}px`,
-        top: `${catPos.y}px`,
+        left: 0,
+        top: 0,
+        transform: 'translate3d(100px, 100px, 0) translate(-50%, -50%)',
         zIndex: 9999,
         pointerEvents: 'none',
-        transform: 'translate(-50%, -50%)'
+        willChange: 'transform'
       }}
       className="block select-none"
     >
@@ -129,7 +124,7 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
               initial={{ opacity: 0, scale: 0.8, y: 5 }}
               animate={{ opacity: 1, scale: 1, y: -12 }}
               exit={{ opacity: 0, scale: 0.8, y: -5 }}
-              className="absolute -top-9 left-1/2 -translate-x-1/2 bg-white border-2 border-black rounded-xl px-2.5 py-0.5 shadow-solid-dark font-mono text-[10px] font-black text-black whitespace-nowrap z-50"
+              className="absolute -top-9 left-1/2 -translate-x-1/2 bg-white border-2 border-black rounded-xl px-2.5 py-0.5 shadow-solid-dark font-mono text-[10px] font-black text-black whitespace-nowrap z-50 pointer-events-none"
             >
               <span>{meowText}</span>
               <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2 h-2 bg-white border-r-2 border-b-2 border-black transform rotate-45" />
@@ -139,7 +134,7 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
 
         {/* Authentic SVG 8-Bit Pixel Cat Sprite */}
         <div
-          className={`relative transition-transform duration-75 ${facingLeft ? 'scale-x-[-1]' : ''}`}
+          className={`relative transition-transform duration-150 ${facingLeft ? 'scale-x-[-1]' : ''}`}
           style={{ width: '48px', height: '48px' }}
           title="Click your pixel cat to meow! 🐾"
         >
@@ -150,11 +145,11 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
           <motion.img
             animate={{
               y: isMoving ? [0, -3, 0] : [0, -1, 0],
-              rotate: isMoving ? [0, 4, -4, 0] : 0
+              rotate: isMoving ? [0, 3, -3, 0] : 0
             }}
             transition={{
               repeat: Infinity,
-              duration: isMoving ? 0.25 : 2,
+              duration: isMoving ? 0.3 : 2,
               ease: 'easeInOut'
             }}
             src="/pixel_cat.svg"
