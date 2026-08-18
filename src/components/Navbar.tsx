@@ -7,6 +7,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles, MessageCircle, FileText, Volume2, VolumeX, Music, Disc, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { playKeyClickSound, playPopSound, setSoundMuted } from '../utils/soundEffects';
+import PixelCatSprite from './PixelCatSprite';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -238,51 +239,8 @@ export default function Navbar() {
         </AnimatePresence>
       </nav>
 
-      {/* Smooth Cursor-Following Pixel Cat Companion Sprite */}
-      <motion.div
-        animate={{
-          x: mousePos.x + 20,
-          y: mousePos.y + 20,
-        }}
-        transition={{
-          type: 'spring',
-          damping: 25,
-          stiffness: 180,
-          mass: 0.5
-        }}
-        className="fixed top-0 left-0 z-50 pointer-events-none hidden md:block"
-      >
-        <div className="relative pointer-events-auto cursor-pointer" onClick={triggerCatMeow}>
-          {/* Dynamic Meow / Speech Bubble Popup */}
-          <AnimatePresence>
-            {meowText && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8, y: 5 }}
-                animate={{ opacity: 1, scale: 1, y: -10 }}
-                exit={{ opacity: 0, scale: 0.8, y: -5 }}
-                className="absolute -top-10 left-1/2 -translate-x-1/2 bg-white border-2 border-black rounded-xl px-2.5 py-1 shadow-solid-dark whitespace-nowrap font-mono text-[10px] font-black text-black z-50 select-none"
-              >
-                <span>{meowText}</span>
-                <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-white border-r-2 border-b-2 border-black transform rotate-45" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Floating Pixel Cat Sprite */}
-          <motion.div
-            animate={{ y: [0, -5, 0] }}
-            transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}
-            className={`w-11 h-11 transition-transform duration-200 ${facingLeft ? 'scale-x-[-1]' : ''}`}
-            title="Click cat companion to meow! 🐾"
-          >
-            <img
-              src="/cat_companion.png"
-              alt="Pixel Cat Companion"
-              className="w-full h-full object-contain image-rendering-pixelated drop-shadow-[2px_4px_0px_rgba(0,0,0,0.5)] hover:scale-125 transition-transform"
-            />
-          </motion.div>
-        </div>
-      </motion.div>
+      {/* Smooth Cursor-Following Animated 8-Bit Pixel Cat Sprite */}
+      <PixelCatSprite mouseX={mousePos.x} mouseY={mousePos.y} />
 
       {/* Floating Lo-Fi Audio Player Widget (Bottom Right) */}
       <motion.div
