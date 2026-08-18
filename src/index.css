@@ -22,6 +22,15 @@
   --color-card-about: #fef1ed;
 }
 
+/* Custom Retro 8-Bit Cursor System */
+html, body {
+  cursor: url('/cursor.svg') 2 2, default !important;
+}
+
+a, button, [role="button"], input, textarea, select, .cursor-pointer {
+  cursor: url('/pointer.svg') 4 2, pointer !important;
+}
+
 .grain-overlay {
   position: relative;
 }

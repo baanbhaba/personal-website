@@ -3,11 +3,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import me from './blackme.png';
-import React from 'react';
-import { motion } from 'motion/react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Compass, Sparkles, MapPin } from 'lucide-react';
+import { playMeowSound } from '../utils/soundEffects';
 
 export default function Hero() {
+  const [heroMeowText, setHeroMeowText] = useState<string | null>(null);
+
+  const handleHeroPfpClick = () => {
+    playMeowSound();
+    const meows = ["meow meow! 🐾", "purrrr~ 😺", "feed rice! 🍚", "meow! ✨", "namaste meow! 🐾"];
+    setHeroMeowText(meows[Math.floor(Math.random() * meows.length)] || "meow meow! 🐾");
+    setTimeout(() => setHeroMeowText(null), 2000);
+  };
   return (
     <section className="pt-28 pb-16 px-4 md:px-8 max-w-7xl mx-auto">
       {/* Outer hand-painted frame container */}
@@ -87,13 +96,30 @@ export default function Hero() {
           animate={{ opacity: 1, scale: 1, rotate: 3 }}
           transition={{ delay: 0.4, type: 'spring', stiffness: 100 }}
           whileHover={{ scale: 1.05, rotate: -1, transition: { duration: 0.3 } }}
-          className="relative w-72 h-72 md:w-96 md:h-96 flex-shrink-0 cursor-pointer bg-[#31161C] p-6 rounded-2xl shadow-solid-rose border-4 border-terracotta overflow-hidden"
+          onClick={handleHeroPfpClick}
+          className="relative w-72 h-72 md:w-96 md:h-96 flex-shrink-0 cursor-pointer bg-[#31161C] p-6 rounded-2xl shadow-solid-rose border-4 border-terracotta overflow-visible"
+          title="click for meow meow! 🐾"
         >
-          {/* Simple Image Frame loading the local me.jpg file */}
+          {/* Meow Speech Bubble Popup */}
+          <AnimatePresence>
+            {heroMeowText && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8, y: 5 }}
+                animate={{ opacity: 1, scale: 1, y: -15 }}
+                exit={{ opacity: 0, scale: 0.8, y: -5 }}
+                className="absolute -top-12 left-1/2 -translate-x-1/2 bg-saffron border-2 border-black rounded-2xl px-4 py-1.5 shadow-solid-dark whitespace-nowrap font-mono text-xs font-black text-black z-50"
+              >
+                <span>{heroMeowText}</span>
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3 h-3 bg-saffron border-r-2 border-b-2 border-black transform rotate-45" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Simple Image Frame loading blackme.png */}
           <div className="relative w-full h-full bg-[#1e1013] rounded-xl overflow-hidden border border-terracotta/40">
             <img 
               src={me}
-              alt="me" 
+              alt="Anirbaan Haldar" 
               className="w-full h-full object-cover rounded-lg"
             />
           </div>

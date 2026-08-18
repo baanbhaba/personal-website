@@ -23,6 +23,15 @@ export default function Navbar() {
   const meowTimeoutRef = useRef<any>(null);
 
   useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    handleScroll(); // initial check
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
     let lastX = window.innerWidth / 2;
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
@@ -122,10 +131,10 @@ export default function Navbar() {
     <>
       <nav
         id="navbar"
-        className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 border-b border-dashed border-terracotta/20 ${
+        className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
           scrolled
-            ? 'bg-cream/95 backdrop-blur-md py-3 shadow-md'
-            : 'bg-transparent py-5'
+            ? 'bg-cream py-3 shadow-md border-b-2 border-black'
+            : 'bg-transparent py-5 border-b border-dashed border-terracotta/20'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
