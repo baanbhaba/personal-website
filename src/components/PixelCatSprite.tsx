@@ -21,7 +21,7 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
         const dx = mouseX - prev.x;
         const dy = mouseY - prev.y;
 
-        // Target offset (sit 35px next to cursor)
+        // Target offset (sit 30px next to cursor)
         const targetX = mouseX + (dx < 0 ? 30 : -30);
         const targetY = mouseY + 15;
 
@@ -63,10 +63,27 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
 
   const handleMeow = () => {
     playMeowSound();
-    const barks = ["meow! 🐾", "purrrr~ 😺", "feed rice! 🍚", "hyprland! ⚡", "miau! ✨", "following u 👀"];
+    const barks = ["meow! 🐾", "purrrr~ 😺", "feed rice! 🍚", "linux! ⚡", "miau! ✨", "following u 👀"];
     setMeowText(barks[Math.floor(Math.random() * barks.length)] || "meow! 🐾");
-    setTimeout(() => setMeowText(null), 2000);
+    setTimeout(() => setMeowText(null), 2200);
   };
+
+  // Periodic random meow sound & speech bubble trigger (12s to 24s interval)
+  useEffect(() => {
+    let timer: any = null;
+    const scheduleNextRandomMeow = () => {
+      const randomDelay = Math.floor(Math.random() * 12000) + 12000;
+      timer = setTimeout(() => {
+        handleMeow();
+        scheduleNextRandomMeow();
+      }, randomDelay);
+    };
+
+    scheduleNextRandomMeow();
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, []);
 
   // Paw animation offset based on walk frame
   const pawOffsetLeft = isMoving ? (walkFrame % 2 === 0 ? -2 : 2) : 0;

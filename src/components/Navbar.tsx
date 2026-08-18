@@ -53,10 +53,11 @@ export default function Navbar() {
       "meow! 🐾",
       "purrrr~ 😺",
       "feeding your rice! 🍚",
-      "hyprland gaps > 0 ⚡",
+      "linux dotfiles ⚡",
       "meow meow! ✨",
       "following u 👀"
     ];
+
     const chosen = meows[Math.floor(Math.random() * meows.length)] || "meow! 🐾";
     setMeowText(chosen);
 
@@ -112,19 +113,28 @@ export default function Navbar() {
   const scrollToSection = (id: string) => {
     playKeyClickSound();
     setMobileMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        const navHeight = 75;
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - navHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 50);
   };
 
   const NAV_LINKS = [
     { label: 'ABOUT', target: 'about' },
-    { label: 'HYPRLAND', target: 'https://github.com/baanbhaba/hyprland-config', external: true },
     { label: 'PHOTOGRAPHY', target: 'photography' },
     { label: 'SKILLS', target: 'skills' },
     { label: 'PROJECTS', target: 'projects' },
-    { label: 'RÉSUMÉ', target: '/resume.pdf', external: true },
+    { label: 'RÉSUMÉ', target: '/anirbaan_haldar_resume.pdf', external: true },
   ];
 
   return (

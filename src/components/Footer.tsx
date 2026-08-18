@@ -15,9 +15,9 @@ export default function Footer() {
           Anirbaan Haldar
         </div>
 
-        {/* not the best copyright */}
+        {/* copyright */}
         <div className="font-sans text-xs text-on-surface/60 text-center font-medium">
-          A Kid
+          © {new Date().getFullYear()} Anirbaan Haldar. Built with React & Tailwind.
         </div>
 
         {/* the three redundant links */}

@@ -12,10 +12,10 @@ import { playKeyClickSound } from '../utils/soundEffects';
 // Dotfiles & Projects Config Database
 const DOTFILES: Dotfile[] = [
   {
-    name: 'hyprland.conf',
-    path: '~/.config/hypr/hyprland.conf',
+    name: 'dotfiles.conf',
+    path: '~/.config/linux/dotfiles.conf',
     language: 'bash',
-    content: `# Hyprland Main Configuration - baanbhaba
+    content: `# Linux Main Configuration - baanbhaba
 autostart = waybar & mako & hyprpaper
 monitor=,preferred,auto,1
 
@@ -32,11 +32,6 @@ general {
     col.active_border = rgba(f4a300ee) rgba(a43152ee) 45deg
     col.inactive_border = rgba(506072aa)
     layout = dwindle
-}
-
-decoration {
-    rounding = 10
-    blur { enabled = true, size = 3 }
 }`
   },
   {
@@ -50,8 +45,8 @@ decoration {
     "status": "Active Development"
   },
   {
-    "name": "hyprland-config",
-    "stack": ["Bash", "Hyprland", "Waybar"],
+    "name": "linux-config",
+    "stack": ["Bash", "Linux", "Waybar"],
     "status": "Maintained"
   }
 ]`
@@ -62,10 +57,10 @@ decoration {
     language: 'markdown',
     content: `# Future Roadmap 🚀
 - [x] Build personal retro portfolio website
-- [x] Unsplash stats API integration
-- [ ] Build CLI games 🎮
-- [ ] Build something related to Palantir 🔮
-- [ ] Add more Linux dotfiles & Hyprland themes`
+- [x] Live photography stats API integration
+- [ ] Build CLI tools & utilities 🎮
+- [ ] Explore backend systems & distributed databases 🔮
+- [ ] Add more Linux dotfiles & system themes`
   }
 ];
 
@@ -86,11 +81,11 @@ export default function AboutSection() {
 
   const [terminalHistory, setTerminalHistory] = useState<Array<{ cmd: string; out: string }>>([
     { cmd: 'whoami', out: 'anirbaan haldar' },
-    { cmd: 'fastfetch', out: `        ,\`''''.    OS ➜ Fedora EVERYTHING 
-       |   ,.  |   KER ➜  Linux - stable one
-       |  |  '_'   UP  ➜ No Idea 
+    { cmd: 'fastfetch', out: `        ,\`''''.    OS ➜ Fedora Linux
+       |   ,.  |   KER ➜ Linux (Kernel 6.x)
+       |  |  '_'   UP  ➜ 99.9% Uptime
  ,....|  |..       MEM ➜ 20$ worth
-.'  _,|    ..'     WM  ➜  Hyprland 
+.'  _,|    ..'     WM  ➜ Wayland / Linux
 |  |   |  |        
 |  ',_,'  |        
  '.     ,'         
@@ -201,50 +196,50 @@ export default function AboutSection() {
       setSnakeOpen(true);
       out = 'Launching Snake Game 🐍... (Use Arrow Keys or WASD to control)';
     } else if (cmd === 'fastfetch' || cmd === 'neofetch') {
-      out = `        ,\`''''.    OS ➜ Fedora EVERYTHING 
-       |   ,.  |   KER ➜  Linux - stable one
-       |  |  '_'   UP  ➜ No Idea 
+      out = `        ,\`''''.    OS ➜ Fedora Linux
+       |   ,.  |   KER ➜ Linux (Kernel 6.x)
+       |  |  '_'   UP  ➜ 99.9% Uptime
  ,....|  |..       MEM ➜ 20$ worth
-.'  _,|    ..'     WM  ➜  Hyprland 
+.'  _,|    ..'     WM  ➜ Wayland / Linux
 |  |   |  |        
 |  ',_,'  |        
  '.     ,'         
    '''''           `;
     } else if (cmd === 'keybinds' || cmd === 'keys') {
-      out = `HYPRLAND KEYBINDINGS SHEET ⚡
+      out = `LINUX KEYBINDINGS SHEET ⚡
 -----------------------------------------
 SUPER + Return       -> Launch Kitty Terminal
 SUPER + Q            -> Kill Active Window
 SUPER + Space        -> Rofi App Launcher
-SUPER + Shift + E    -> Exit Hyprland Session
+SUPER + Shift + E    -> Exit Session
 SUPER + F            -> Toggle Fullscreen Window
 SUPER + 1..9         -> Switch Workspaces
 SUPER + Drag Mouse   -> Move/Resize Window`;
     } else if (cmd === 'quote' || cmd === 'status') {
       const quotes = [
-        '"Hyprland gaps > 0 or I riot."',
-        '"Configured in Vim, written in VS Code."',
+        '"Code is like humor. When you have to explain it, it\'s bad."',
+        '"First, solve the problem. Then, write the code."',
+        '"Simplicity is prerequisite for reliability."',
         '"Linux is user-friendly. It\'s just picky about who its friends are."',
-        '"It\'s not a bug, it\'s an undocumented ricer feature."',
-        '"Less GUI, more terminal. Stay fast."'
+        '"Stay curious and keep crafting."'
       ];
       out = quotes[Math.floor(Math.random() * quotes.length)] || quotes[0]!;
     } else if (cmd === 'ls') {
-      out = 'total 12K\n-rw-r--r-- 1 baanbhaba 452B hyprland.conf\n-rw-r--r-- 1 baanbhaba 320B personal_projects.json\n-rw-r--r-- 1 baanbhaba 210B future_plans.md';
+      out = 'total 12K\n-rw-r--r-- 1 baanbhaba 452B dotfiles.conf\n-rw-r--r-- 1 baanbhaba 320B personal_projects.json\n-rw-r--r-- 1 baanbhaba 210B future_plans.md';
     } else if (cmd.startsWith('cat ')) {
       const fileName = cmd.replace('cat ', '').trim();
       const matched = DOTFILES.find(d => d.name.toLowerCase().includes(fileName) || d.path.toLowerCase().includes(fileName));
       if (matched) {
         out = matched.content;
       } else {
-        out = `cat: ${fileName}: No such file. Try 'cat hyprland.conf' or 'cat personal_projects.json'`;
+        out = `cat: ${fileName}: No such file. Try 'cat dotfiles.conf' or 'cat personal_projects.json'`;
       }
     } else if (cmd === 'clear') {
       setTerminalHistory([]);
       setTerminalInput('');
       return;
     } else if (cmd === 'theme') {
-      out = 'Active Theme: Smth that isnt too boring i hope';
+      out = 'Active Theme: Warm Retro Modern';
     } else if (cmd.startsWith('cowsay ')) {
       const msg = cmd.replace('cowsay ', '').trim();
       out = ` _____________________
@@ -297,7 +292,7 @@ SUPER + Drag Mouse   -> Move/Resize Window`;
 
             {/* Description Copy */}
             <p className="font-sans text-base md:text-lg leading-relaxed text-on-surface mb-6 font-medium">
-            I'm Anirbaan. I tinker with configs because it scratches my brain right. I shoot photos because details are worth remembering. Welcome to my corner of the internet — chaotic & messy yet comfy.
+              I'm Anirbaan — a developer and creator based in Hyderabad. I build web applications, write open-source code, customize Linux workflows, and capture life through digital photography. Welcome to my corner of the web!
             </p>
           </div>
 
@@ -310,9 +305,9 @@ SUPER + Drag Mouse   -> Move/Resize Window`;
             <div className="flex flex-wrap gap-2.5">
               {[
                 { name: 'Fedora Linux', color: 'bg-saffron text-on-surface hover:rotate-2' },
-                { name: 'Hyprland', color: 'bg-terracotta text-white hover:-rotate-1' },
-                { name: 'Apple Music', color: 'bg-red-500 text-white hover:rotate-1' },
-                { name: 'Doing dumb stuff', color: 'bg-turmeric text-on-surface hover:-rotate-2' },
+                { name: 'Linux Customization', color: 'bg-terracotta text-white hover:-rotate-1' },
+                { name: 'Music', color: 'bg-deep-rose text-white hover:rotate-1' },
+                { name: 'Creative Coding', color: 'bg-turmeric text-on-surface hover:-rotate-2' },
               ].map((item, i) => (
                 <span
                   key={i}
@@ -347,7 +342,7 @@ SUPER + Drag Mouse   -> Move/Resize Window`;
                   / THE HOBBY
                 </h2>
                 <p className="font-serif italic text-lg text-dusty-rose mt-3">
-                  I tinker with configs. It's fun.
+                  Exploring developer tools, Linux setups, and web technologies.
                 </p>
               </div>
 
@@ -372,7 +367,7 @@ SUPER + Drag Mouse   -> Move/Resize Window`;
               </div>
             </div>
 
-            {/* Links section from mockup */}
+            {/* Links section */}
             <div className="flex gap-4 mb-4">
               <a
                 href="https://github.com/baanbhaba"
@@ -382,15 +377,6 @@ SUPER + Drag Mouse   -> Move/Resize Window`;
               >
                 <ChevronRight className="w-4 h-4 text-terracotta" />
                 → GitHub
-              </a>
-              <a
-                href="https://github.com/baanbhaba/hyprland-config"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 font-sans font-bold text-xs tracking-wider text-saffron hover:text-turmeric transition-colors"
-              >
-                <ChevronRight className="w-4 h-4 text-terracotta" />
-                → Hyprland Config
               </a>
             </div>
 
@@ -426,7 +412,7 @@ SUPER + Drag Mouse   -> Move/Resize Window`;
                         type="text"
                         value={terminalInput}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTerminalInput(e.target.value)}
-                        placeholder="TYPE THISSSS ➜ help"
+                        placeholder="Type 'help' for commands..."
                         className="flex-1 bg-transparent border-none text-white focus:outline-none placeholder-gray-600 font-mono"
                       />
                       <button type="submit" className="text-saffron hover:text-white p-1">
@@ -481,7 +467,7 @@ SUPER + Drag Mouse   -> Move/Resize Window`;
           </div>
 
           <div className="text-[10px] text-dusty-rose/40 font-mono mt-4 pt-2 border-t border-white/5 flex justify-between">
-            <span>WM: Hyprland // TERM: kitty</span>
+            <span>OS: Fedora // TERM: kitty</span>
             <span>Made in Hyderabad with Love</span>
           </div>
         </motion.div>

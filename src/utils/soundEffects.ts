@@ -27,7 +27,8 @@ const createAudioPool = (src: string, count = 4) => {
 const clickPool = createAudioPool('/click.wav');
 const shutterPool = createAudioPool('/shutter.wav');
 const popPool = createAudioPool('/pop.wav');
-const meowPool = createAudioPool('/meow.ogg');
+const meowPool = createAudioPool('/cat_meow_306184.mp3?v=306184');
+meowPool.forEach((a) => { a.volume = 0.95; });
 
 let clickIdx = 0;
 let shutterIdx = 0;
@@ -58,5 +59,12 @@ export const playPopSound = () => {
 };
 
 export const playMeowSound = () => {
-  playFromPool(meowPool, () => meowIdx, (n) => { meowIdx = n; });
+  if (soundMuted || typeof window === 'undefined') return;
+  try {
+    const audio = new Audio('/cat_meow_306184.mp3?t=' + Date.now());
+    audio.volume = 0.95;
+    audio.play().catch(() => {});
+  } catch {
+    // Ignore audio play errors
+  }
 };

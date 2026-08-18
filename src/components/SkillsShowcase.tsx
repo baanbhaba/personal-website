@@ -21,10 +21,10 @@ const SKILL_CATEGORIES = [
     skills: ['React 18', 'Tailwind CSS', 'Vite', 'Framer Motion', 'REST APIs']
   },
   {
-    title: 'Linux & Custom Ricing',
+    title: 'Linux & Customization',
     icon: Terminal,
     color: 'bg-indigo-blue text-white border-black',
-    skills: ['Fedora Linux', 'Hyprland WM', 'Waybar', 'Kitty Terminal', 'Rofi', 'Dotfiles']
+    skills: ['Fedora Linux', 'Wayland', 'Waybar', 'Kitty Terminal', 'Rofi', 'Dotfiles']
   },
   {
     title: 'Tools & Ecosystem',
@@ -36,7 +36,7 @@ const SKILL_CATEGORIES = [
     title: 'Soft Skills & Mindset',
     icon: HeartHandshake,
     color: 'bg-turmeric text-black border-black',
-    skills: ['Problem Solving', 'Adaptability', 'Creative Thinking', 'Attention to Detail', 'Unsplash Photography']
+    skills: ['Problem Solving', 'Adaptability', 'Creative Thinking', 'Attention to Detail', 'Photography & Visuals']
   }
 ];
 

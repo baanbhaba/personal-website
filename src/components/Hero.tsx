@@ -72,7 +72,7 @@ export default function Hero() {
             <div className="flex items-center gap-3 pt-2 text-on-surface">
               <span className="w-2 h-2 rounded-full bg-saffron animate-ping" />
               <p className="font-sans text-lg md:text-xl font-medium">
-                Pull up a charpai. Stay a while.
+                Welcome to my digital workspace & portfolio.
               </p>
             </div>
 

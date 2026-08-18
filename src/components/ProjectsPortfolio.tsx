@@ -47,9 +47,9 @@ const FALLBACK_REPOS: GithubRepo[] = [
   },
   {
     id: 3,
-    name: 'hyprland-config',
-    description: 'My custom Hyprland rice dotfiles for Fedora Linux',
-    html_url: 'https://github.com/baanbhaba/hyprland-config',
+    name: 'linux-config',
+    description: 'My custom Linux rice dotfiles and system setup',
+    html_url: 'https://github.com/baanbhaba/linux-config',
     stargazers_count: 0,
     forks_count: 0,
     language: 'Shell',
@@ -146,44 +146,6 @@ export default function ProjectsPortfolio() {
     fetchRepos();
   }, []);
 
-  // Fetch raw README when activeRepo changes
-  useEffect(() => {
-    if (!activeRepo) return;
-    if (readmeMap[activeRepo.name]) return; // already cached
-
-    const fetchReadme = async () => {
-      setLoadingReadme(true);
-      const branch = activeRepo.default_branch || 'main';
-      try {
-        const res = await fetch(`https://raw.githubusercontent.com/baanbhaba/${activeRepo.name}/${branch}/README.md`);
-        if (!res.ok) throw new Error('No README found');
-        const text = await res.text();
-        
-        // Clean up markdown headers/html to make a clean summary preview
-        const cleaned = text
-          .replace(/<[^>]*>?/gm, '') // strip html tags
-          .replace(/^#+\s+/gm, '')    // strip markdown headers
-          .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // strip markdown links
-          .replace(/!\[.*?\]\(.*?\)/g, '') // strip images
-          .trim();
-
-        setReadmeMap((prev) => ({
-          ...prev,
-          [activeRepo.name]: cleaned || activeRepo.description || 'No detailed README summary available.'
-        }));
-      } catch {
-        setReadmeMap((prev) => ({
-          ...prev,
-          [activeRepo.name]: activeRepo.description || 'Custom Linux configuration & developer repository.'
-        }));
-      } finally {
-        setLoadingReadme(false);
-      }
-    };
-
-    fetchReadme();
-  }, [activeRepoId]);
-
   const categories = ['All', 'Projects', 'Configs', 'Docs'];
 
   const filteredRepos = selectedCategory === 'All'
@@ -191,6 +153,77 @@ export default function ProjectsPortfolio() {
     : repos.filter((r) => getRepoCategory(r.name) === selectedCategory);
 
   const activeRepo = repos.find((r) => r.id === activeRepoId) || filteredRepos[0] || repos[0];
+
+  // Sync activeRepoId when selectedCategory changes if current selection is not in filtered list
+  useEffect(() => {
+    if (filteredRepos.length > 0) {
+      const exists = filteredRepos.some((r) => r.id === activeRepoId);
+      if (!exists && filteredRepos[0]) {
+        setActiveRepoId(filteredRepos[0].id);
+      }
+    }
+  }, [selectedCategory, repos]);
+
+  // Fetch raw README when activeRepo changes
+  useEffect(() => {
+    if (!activeRepo) return;
+    if (readmeMap[activeRepo.name]) return; // already cached
+
+    const fetchReadme = async () => {
+      setLoadingReadme(true);
+      try {
+        let text = '';
+        // Method 1: GitHub Official Repo API (handles any branch, filename case, or extension)
+        const apiRes = await fetch(`https://api.github.com/repos/baanbhaba/${activeRepo.name}/readme`, {
+          headers: { Accept: 'application/vnd.github.raw+json' }
+        });
+
+        if (apiRes.ok) {
+          text = await apiRes.text();
+        } else {
+          // Method 2: Fallback direct raw URLs for main & master branches
+          const branch = activeRepo.default_branch || 'main';
+          const rawRes = await fetch(`https://raw.githubusercontent.com/baanbhaba/${activeRepo.name}/${branch}/README.md`);
+          if (rawRes.ok) {
+            text = await rawRes.text();
+          } else {
+            const masterRes = await fetch(`https://raw.githubusercontent.com/baanbhaba/${activeRepo.name}/master/README.md`);
+            if (masterRes.ok) {
+              text = await masterRes.text();
+            } else {
+              throw new Error('No README file');
+            }
+          }
+        }
+        
+        // Clean up markdown headers/html to make a clean readable summary preview
+        const cleaned = text
+          .replace(/<!--[\s\S]*?-->/g, '') // strip HTML comments
+          .replace(/<[^>]*>?/gm, '')       // strip HTML tags
+          .replace(/^#+\s+/gm, '')          // strip markdown header hashes
+          .replace(/!\[.*?\]\(.*?\)/g, '')   // strip markdown images
+          .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // strip markdown links
+          .replace(/`{3}[\s\S]*?`{3}/g, '')  // strip codeblocks
+          .replace(/`([^`]+)`/g, '$1')      // strip inline code ticks
+          .replace(/\n\s*\n/g, '\n')        // collapse multiple blank lines
+          .trim();
+
+        setReadmeMap((prev) => ({
+          ...prev,
+          [activeRepo.name]: cleaned || activeRepo.description || 'No detailed README content available.'
+        }));
+      } catch {
+        setReadmeMap((prev) => ({
+          ...prev,
+          [activeRepo.name]: activeRepo.description || 'Linux configuration & developer repository.'
+        }));
+      } finally {
+        setLoadingReadme(false);
+      }
+    };
+
+    fetchReadme();
+  }, [activeRepo?.id, activeRepo?.name]);
 
   return (
     <div className="bg-card-about border-2 border-black rounded-2xl p-4 md:p-6 shadow-solid-dark text-on-surface">

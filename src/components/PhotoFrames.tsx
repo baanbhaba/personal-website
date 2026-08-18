@@ -18,12 +18,12 @@ const CURATED_FRAMES: PhotoFrame[] = [
     url: 'https://images.unsplash.com/photo-1714631062530-4125f1015137?q=80&w=800&auto=format&fit=crop',
     views: '845',
     downloads: '41',
-    location: 'Inside Your Nightmares, India',
-    camera: 'Spooky Snaps',
-    settings: 'Available on Unsplash',
-    description: 'Spotted a leggy little wall-dweller chilling by the door. Just your casual, multi-legged roommate doing its thing',
+    location: 'Hyderabad, India',
+    camera: 'Macro Capture',
+    settings: 'Available High-Res',
+    description: 'Spotted a leggy little wall-dweller chilling by the door. Just a casual, multi-legged roommate doing its thing.',
     unsplashUrl: 'https://unsplash.com/photos/9M-Y580a7wE',
-    weirdLore: { vibe: '🕸️ 3:00 AM Jumpscare', weirdFact: 'Taught it how to quit Vim' }
+    weirdLore: { vibe: '🕸️ Nighttime Macro', weirdFact: 'Nature in high detail' }
   },
   {
     id: 'frame-2',
@@ -32,12 +32,12 @@ const CURATED_FRAMES: PhotoFrame[] = [
     url: 'https://images.unsplash.com/photo-1694444778778-65f5d412899f?q=80&w=800&auto=format&fit=crop',
     views: '779',
     downloads: '39',
-    location: 'Secret gadern',
+    location: 'Secret garden',
     camera: 'Moody Botanicals',
-    settings: 'Available on Unsplash',
-    description: 'This tiny flower is flexing some serious orange and red gradients to outshine the absolute darkness around it.',
+    settings: 'Available High-Res',
+    description: 'This tiny flower flexes vibrant orange and red gradients, standing out against dark surrounding leaves.',
     unsplashUrl: 'https://unsplash.com/photos/Ti7Fyz5kxf8',
-    weirdLore: { vibe: '🌺 Cyberpunk Botanics', weirdFact: 'Photosynthesizes RGB lights' }
+    weirdLore: { vibe: '🌺 Vivid Floral', weirdFact: 'Rich natural palette' }
   },
   {
     id: 'frame-3',
@@ -46,12 +46,12 @@ const CURATED_FRAMES: PhotoFrame[] = [
     url: 'https://images.unsplash.com/photo-1706900961630-33ca9d775443?q=80&w=800&auto=format&fit=crop',
     views: '33,444',
     downloads: '216',
-    location: 'Sector 7, Kitchen Table',
-    camera: 'The box of treasure',
-    settings: 'Available on Unsplash',
-    description: 'A sleek teal and black mini cruiser ready to warp through your living room at the speed of imagination.',
+    location: 'Studio Desk',
+    camera: 'Macro Lens',
+    settings: 'Available High-Res',
+    description: 'A sleek teal and black mini cruiser ready to warp through your imagination.',
     unsplashUrl: 'https://unsplash.com/photos/a-toy-car-sitting-on-top-of-a-wooden-table-tgz8Eo9qU0w',
-    weirdLore: { vibe: '🏎️ Hot Wheels Warp Drive', weirdFact: 'Zero emissions, runs on nostalgia' }
+    weirdLore: { vibe: '🏎️ Mini Speedster', weirdFact: 'Nostalgic scale design' }
   },
   {
     id: 'frame-4',
@@ -60,13 +60,12 @@ const CURATED_FRAMES: PhotoFrame[] = [
     url: 'https://images.unsplash.com/photo-1721498033318-0701c5c00bcf?q=80&w=800&auto=format&fit=crop',
     views: '578',
     downloads: '52',
-    location: 'The Void, Universe',
-    camera: 'The flamey flame',
-    settings: 'Available on Unsplash',
-    description: 'One tiny candle absolutely carrying the team against an entire room full of pure, unadulterated darkness.',
+    location: 'Studio Night',
+    camera: 'Low-Light ISO',
+    settings: 'Available High-Res',
+    description: 'One tiny candle illuminating a dark room with a warm ambient flame.',
     unsplashUrl: 'https://unsplash.com/photos/6VQLWVs9qY8',
-    weirdLore: { vibe: '🕯️ Dark Souls Bonfire', weirdFact: 'Keeps the void bugs away' }
-
+    weirdLore: { vibe: '🕯️ Candlelight Ambient', weirdFact: 'Soft warm tone' }
   },
   {
     id: 'frame-5',
@@ -75,13 +74,12 @@ const CURATED_FRAMES: PhotoFrame[] = [
     url: 'https://images.unsplash.com/photo-1745362803735-a32f4998c112?q=80&w=800&auto=format&fit=crop',
     views: '296',
     downloads: '20',
-    location: 'Procrastination Station, Bedroom',
-    camera: 'The white in black',
-    settings: 'Available on Unsplash',
-    description: 'A single lamp fighting for its life to illuminate a desk, a plant, and someone\'s unfinished homework assignments.',
+    location: 'Study Desk',
+    camera: 'Warm Minimalist',
+    settings: 'Available High-Res',
+    description: 'A single desk lamp highlighting a potted plant and quiet study space.',
     unsplashUrl: 'https://unsplash.com/photos/z2Qs7ipL6pc',
-    weirdLore: { vibe: '💡 Late Night Coding', weirdFact: 'Listens to lo-fi on repeat' }
-
+    weirdLore: { vibe: '💡 Late Night Desk', weirdFact: 'Cozy study mood' }
   }
 ];
 
@@ -102,6 +100,19 @@ export default function PhotoFrames() {
 
   // Per-photo live stats cache (photoId -> { views, downloads })
   const [photoStatsMap, setPhotoStatsMap] = useState<Record<string, { views: string; downloads: string }>>({});
+
+  // Lock page background scrolling while Lightbox modal is open
+  useEffect(() => {
+    if (lightboxOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [lightboxOpen]);
 
   useEffect(() => {
     const fetchLiveUnsplashStats = async () => {
@@ -226,7 +237,7 @@ export default function PhotoFrames() {
             </div>
 
             <blockquote className="font-serif italic text-base md:text-lg text-on-surface leading-relaxed pt-1">
-              "Top 25% of contributors on Unsplash. Used in Notion, PicsArt, & blogs worldwide."
+              "Top contributor gallery featuring moments, lighting, and macro captures."
             </blockquote>
 
             {/* View Gallery Action Buttons */}
@@ -250,7 +261,7 @@ export default function PhotoFrames() {
                 onClick={() => playKeyClickSound()}
                 className="bg-white text-black font-sans font-extrabold text-xs tracking-wider px-5 py-3 rounded-lg border-2 border-black hover:bg-gray-100 hover:shadow-solid-dark transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-sm"
               >
-                <span>📸</span>
+                <Camera className="w-4 h-4 text-terracotta" />
                 @baanbhaba
               </a>
             </div>
@@ -316,13 +327,15 @@ export default function PhotoFrames() {
               className="bg-cream border-4 border-black rounded-2xl w-full max-w-5xl max-h-[92vh] shadow-solid-dark relative overflow-hidden flex flex-col lg:flex-row"
             >
               {/* Left Column: Image Viewer */}
-              <div className="lg:w-7/12 bg-[#120b0a] relative flex items-center justify-center min-h-[300px] sm:min-h-[420px] select-none border-b-4 lg:border-b-0 lg:border-r-4 border-black">
-                <img
-                  src={activeFrame.url}
-                  alt={activeFrame.title}
-                  className="w-full h-full max-h-[60vh] lg:max-h-[85vh] object-contain block mx-auto p-4"
-                  referrerPolicy="no-referrer"
-                />
+              <div className="lg:w-7/12 bg-[#120b0a] relative flex items-center justify-center h-[260px] sm:h-[380px] lg:h-auto lg:min-h-[480px] shrink-0 select-none border-b-4 lg:border-b-0 lg:border-r-4 border-black p-3 sm:p-4 overflow-hidden">
+                <div className="w-full h-full rounded-xl overflow-hidden relative shadow-inner bg-black">
+                  <img
+                    src={activeFrame.url}
+                    alt={activeFrame.title}
+                    className="w-full h-full object-cover block"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
 
                 {/* Left Navigation Arrow */}
                 <button
@@ -456,8 +469,8 @@ export default function PhotoFrames() {
                     rel="noreferrer"
                     className="w-full py-2.5 bg-saffron text-black font-sans font-black text-xs uppercase tracking-wider border-2 border-black rounded-xl hover:bg-turmeric transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:translate-x-0.5 text-center"
                   >
-                    <span>📸</span>
-                    {activeFrame.unsplashUrl ? 'Open Original on Unsplash' : 'See @baanbhaba on Unsplash'}
+                    <Camera className="w-4 h-4" />
+                    {activeFrame.unsplashUrl ? 'Open Original High-Res Photo' : 'See @baanbhaba Gallery'}
                   </a>
                 </div>
               </div>
