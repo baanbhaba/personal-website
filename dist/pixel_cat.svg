@@ -1,0 +1,38 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges' width='64' height='64'>
+  <!-- Outline Shadow -->
+  <rect x='3' y='4' width='10' height='10' fill='#000000' />
+  
+  <!-- Ears -->
+  <rect x='4' y='2' width='2' height='3' fill='#f4a300' />
+  <rect x='5' y='3' width='1' height='1' fill='#a43152' />
+  <rect x='10' y='2' width='2' height='3' fill='#f4a300' />
+  <rect x='10' y='3' width='1' height='1' fill='#a43152' />
+
+  <!-- Head Base -->
+  <rect x='4' y='5' width='8' height='4' fill='#f4a300' />
+  <!-- Ginger Stripes -->
+  <rect x='6' y='5' width='1' height='2' fill='#d97706' />
+  <rect x='9' y='5' width='1' height='2' fill='#d97706' />
+
+  <!-- Eyes -->
+  <rect x='5' y='6' width='2' height='2' fill='#1e293b' />
+  <rect x='5' y='6' width='1' height='1' fill='#ffffff' />
+  <rect x='9' y='6' width='2' height='2' fill='#1e293b' />
+  <rect x='9' y='6' width='1' height='1' fill='#ffffff' />
+
+  <!-- Snout & Nose -->
+  <rect x='7' y='7' width='2' height='1' fill='#ffffff' />
+  <rect x='7.5' y='7' width='1' height='1' fill='#a43152' />
+
+  <!-- Body -->
+  <rect x='4' y='9' width='8' height='5' fill='#f4a300' />
+  <rect x='6' y='9' width='4' height='4' fill='#ffffff' />
+
+  <!-- Tail -->
+  <rect x='2' y='8' width='2' height='4' fill='#d97706' />
+  <rect x='1' y='7' width='2' height='2' fill='#d97706' />
+
+  <!-- Paws -->
+  <rect x='4' y='14' width='2' height='1' fill='#ffffff' />
+  <rect x='10' y='14' width='2' height='1' fill='#ffffff' />
+</svg>

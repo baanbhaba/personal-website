@@ -101,65 +101,30 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
           )}
         </AnimatePresence>
 
-        {/* Pure CSS 8-Bit Pixel Art Cat Sprite */}
+        {/* Authentic SVG 8-Bit Pixel Cat Sprite */}
         <div
           className={`relative transition-transform duration-75 ${facingLeft ? 'scale-x-[-1]' : ''}`}
-          style={{ width: '40px', height: '40px' }}
+          style={{ width: '48px', height: '48px' }}
           title="Click your pixel cat to meow! 🐾"
         >
-          {/* Pixel Cat Body Shadow */}
-          <div className="absolute bottom-0 left-2 right-2 h-1.5 bg-black/30 rounded-full blur-[1px]" />
+          {/* Shadow */}
+          <div className="absolute bottom-0 left-2 right-2 h-1.5 bg-black/40 rounded-full blur-[1px]" />
 
-          {/* Pixel Tail */}
-          <div
-            className="absolute bottom-3 left-0 w-2 h-4 bg-terracotta border border-black rounded-t-full transition-transform origin-bottom"
-            style={{ transform: `rotate(${tailAngle - 20}deg)` }}
+          {/* Bobbing Animated Pixel Cat Image */}
+          <motion.img
+            animate={{
+              y: isMoving ? [0, -3, 0] : [0, -1, 0],
+              rotate: isMoving ? [0, 4, -4, 0] : 0
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: isMoving ? 0.25 : 2,
+              ease: 'easeInOut'
+            }}
+            src="/pixel_cat.svg"
+            alt="8-Bit Pixel Cat Companion"
+            className="w-full h-full object-contain image-rendering-pixelated drop-shadow-[2px_3px_0px_rgba(0,0,0,0.6)]"
           />
-
-          {/* Main Cat Body */}
-          <div className="absolute bottom-1 left-2.5 w-7 h-6 bg-saffron border-2 border-black rounded-lg">
-            {/* Orange Stripes */}
-            <div className="absolute top-1 left-1.5 w-1 h-3 bg-terracotta rounded-full" />
-            <div className="absolute top-1 right-1.5 w-1 h-3 bg-terracotta rounded-full" />
-          </div>
-
-          {/* Front & Back Paws with Walking Animation */}
-          <div
-            className="absolute bottom-0 left-3 w-1.5 h-2 bg-black rounded-b-sm transition-transform"
-            style={{ transform: `translateY(${pawOffsetLeft}px)` }}
-          />
-          <div
-            className="absolute bottom-0 left-5.5 w-1.5 h-2 bg-black rounded-b-sm transition-transform"
-            style={{ transform: `translateY(${pawOffsetRight}px)` }}
-          />
-
-          {/* Cat Head */}
-          <div className="absolute top-1 left-1.5 w-8 h-7 bg-saffron border-2 border-black rounded-xl">
-            {/* Left Ear */}
-            <div className="absolute -top-2.5 left-0.5 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[8px] border-b-black">
-              <div className="absolute top-[2px] -left-[3px] w-0 h-0 border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-b-[6px] border-b-deep-rose" />
-            </div>
-            {/* Right Ear */}
-            <div className="absolute -top-2.5 right-0.5 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[8px] border-b-black">
-              <div className="absolute top-[2px] -left-[3px] w-0 h-0 border-l-[3px] border-l-transparent border-r-[3px] border-r-transparent border-b-[6px] border-b-deep-rose" />
-            </div>
-
-            {/* Eyes */}
-            <div className="absolute top-2 left-1.5 w-2 h-2 bg-black rounded-full flex items-center justify-center">
-              <div className="w-0.5 h-0.5 bg-white rounded-full translate-x-[0.5px] -translate-y-[0.5px]" />
-            </div>
-            <div className="absolute top-2 right-1.5 w-2 h-2 bg-black rounded-full flex items-center justify-center">
-              <div className="w-0.5 h-0.5 bg-white rounded-full translate-x-[0.5px] -translate-y-[0.5px]" />
-            </div>
-
-            {/* Pink Nose */}
-            <div className="absolute top-3.5 left-1/2 -translate-x-1/2 w-1.5 h-1 bg-deep-rose rounded-full" />
-            {/* Whiskers */}
-            <div className="absolute top-4 -left-1.5 w-2 h-[1px] bg-black" />
-            <div className="absolute top-4.5 -left-1.5 w-2 h-[1px] bg-black transform rotate-12" />
-            <div className="absolute top-4 -right-1.5 w-2 h-[1px] bg-black" />
-            <div className="absolute top-4.5 -right-1.5 w-2 h-[1px] bg-black transform -rotate-12" />
-          </div>
         </div>
       </div>
     </div>
