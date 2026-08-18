@@ -90,6 +90,25 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
   const pawOffsetRight = isMoving ? (walkFrame % 2 === 1 ? -2 : 2) : 0;
   const tailAngle = isMoving ? (walkFrame % 2 === 0 ? 15 : -15) : 0;
 
+  // Touch screen listener for mobile devices
+  useEffect(() => {
+    const handleTouch = (e: TouchEvent) => {
+      if (e.touches && e.touches[0]) {
+        const touch = e.touches[0];
+        setCatPos({ x: touch.clientX, y: touch.clientY - 25 });
+        setIsMoving(true);
+      }
+    };
+
+    window.addEventListener('touchmove', handleTouch, { passive: true });
+    window.addEventListener('touchstart', handleTouch, { passive: true });
+
+    return () => {
+      window.removeEventListener('touchmove', handleTouch);
+      window.removeEventListener('touchstart', handleTouch);
+    };
+  }, []);
+
   return (
     <div
       style={{
@@ -100,7 +119,7 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
         pointerEvents: 'none',
         transform: 'translate(-50%, -50%)'
       }}
-      className="hidden md:block select-none"
+      className="block select-none"
     >
       <div className="relative pointer-events-auto cursor-pointer" onClick={handleMeow}>
         {/* Meow Speech Bubble */}
