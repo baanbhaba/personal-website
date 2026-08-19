@@ -65,7 +65,8 @@ export default function SkillsShowcase() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: idx * 0.1 }}
-                className="bg-surface border-2 border-black rounded-xl p-4 shadow-solid-dark flex flex-col justify-between"
+                whileHover={{ y: -4, scale: 1.03 }}
+                className="bg-surface border-2 border-black rounded-xl p-4 shadow-solid-dark flex flex-col justify-between cursor-pointer hover:shadow-[8px_8px_0px_0px_#231917]"
               >
                 <div>
                   <div className="flex items-center gap-2 mb-3">
@@ -81,7 +82,7 @@ export default function SkillsShowcase() {
                     {cat.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="px-2.5 py-1 bg-black/5 hover:bg-black/10 text-on-surface font-mono font-bold text-xs rounded border border-black/10 transition-colors"
+                        className="px-2.5 py-1 bg-black/5 hover:bg-black/15 text-on-surface font-mono font-bold text-xs rounded border border-black/10 transition-all duration-150 cursor-pointer hover:shadow-md hover:-translate-y-0.5"
                       >
                         {skill}
                       </span>

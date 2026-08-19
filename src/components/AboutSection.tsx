@@ -311,7 +311,7 @@ SUPER + Drag Mouse   -> Move/Resize Window`;
               ].map((item, i) => (
                 <span
                   key={i}
-                  className={`inline-block px-3.5 py-1.5 text-xs font-bold rounded-lg shadow-sm border border-black/10 transition-all duration-200 cursor-default ${item.color}`}
+                  className={`inline-block px-3.5 py-1.5 text-xs font-bold rounded-lg shadow-sm border border-black/10 transition-all duration-200 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 ${item.color}`}
                 >
                   {item.name}
                 </span>

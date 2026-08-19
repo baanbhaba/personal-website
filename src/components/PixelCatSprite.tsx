@@ -62,12 +62,12 @@ export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) 
     setTimeout(() => setMeowText(null), 2200);
   };
 
-  // Periodic random meow sound & speech bubble trigger (14s to 26s interval, desktop only)
+  // Periodic random meow sound & speech bubble trigger (15s to 35s interval, desktop only)
   useEffect(() => {
     if (typeof window !== 'undefined' && window.innerWidth < 768) return;
     let timer: any = null;
     const scheduleNextRandomMeow = () => {
-      const randomDelay = Math.floor(Math.random() * 12000) + 14000;
+      const randomDelay = Math.floor(Math.random() * 20000) + 15000;
       timer = setTimeout(() => {
         if (window.innerWidth >= 768) {
           handleMeow();

@@ -5,7 +5,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { FolderGit2, Star, GitFork, ExternalLink, RefreshCw, ChevronRight, FileText, Loader2 } from 'lucide-react';
+import { FolderGit2, Star, GitFork, ExternalLink, RefreshCw, ChevronRight, Clock, Tag } from 'lucide-react';
 
 export interface GithubRepo {
   id: number;
@@ -17,6 +17,7 @@ export interface GithubRepo {
   language: string | null;
   updated_at: string;
   default_branch?: string;
+  topics?: string[];
   fork: boolean;
 }
 
@@ -95,6 +96,16 @@ const FALLBACK_REPOS: GithubRepo[] = [
   }
 ];
 
+// Curated fallback descriptions — used when GitHub API returns null
+const REPO_DESCRIPTIONS: Record<string, string> = {
+  'personal-website':  'My personal corner of the internet. Built with React 18, Tailwind CSS, and Framer Motion. Retro-modern aesthetic, Linux-inspired, and constantly evolving.',
+  'project-alchemi':   'An experimental web application project — a creative sandbox for trying out new ideas, UI patterns, and front-end concepts before they go anywhere serious.',
+  'linux-config':      'My full Linux setup in one repo. Covers Hyprland, Waybar, Mako, and everything in between. The dotfiles that make my desktop actually feel like mine.',
+  'waybar-config':     'Custom Waybar configuration for my Hyprland setup. Clean modules, warm color palette, and just enough info without cluttering the bar.',
+  'kitty-config':      'Config files for the Kitty terminal emulator. Custom fonts, color schemes, keybindings, and tweaks that make the terminal feel fast and look good.',
+  'rofi':              'Rofi application launcher theme and config. Minimal, keyboard-driven, and styled to match the rest of my Linux rice without getting in the way.',
+};
+
 const CATEGORY_DOTS: Record<string, string> = {
   Projects: 'bg-blue-400',
   Configs: 'bg-emerald-400',
@@ -118,15 +129,13 @@ export default function ProjectsPortfolio() {
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [activeRepoId, setActiveRepoId] = useState<number | null>(null);
-  
-  // README content state cache per repo name
-  const [readmeMap, setReadmeMap] = useState<Record<string, string>>({});
-  const [loadingReadme, setLoadingReadme] = useState<boolean>(false);
 
   const fetchRepos = async () => {
     setLoading(true);
     try {
-      const res = await fetch('https://api.github.com/users/baanbhaba/repos?sort=updated&per_page=15');
+      const res = await fetch('https://api.github.com/users/baanbhaba/repos?sort=updated&per_page=15', {
+        headers: { Accept: 'application/vnd.github.mercy-preview+json' }
+      });
       if (!res.ok) throw new Error('API limit');
       const data: GithubRepo[] = await res.json();
       const filtered = data.filter((r) => !r.fork);
@@ -164,66 +173,17 @@ export default function ProjectsPortfolio() {
     }
   }, [selectedCategory, repos]);
 
-  // Fetch raw README when activeRepo changes
-  useEffect(() => {
-    if (!activeRepo) return;
-    if (readmeMap[activeRepo.name]) return; // already cached
-
-    const fetchReadme = async () => {
-      setLoadingReadme(true);
-      try {
-        let text = '';
-        // Method 1: GitHub Official Repo API (handles any branch, filename case, or extension)
-        const apiRes = await fetch(`https://api.github.com/repos/baanbhaba/${activeRepo.name}/readme`, {
-          headers: { Accept: 'application/vnd.github.raw+json' }
-        });
-
-        if (apiRes.ok) {
-          text = await apiRes.text();
-        } else {
-          // Method 2: Fallback direct raw URLs for main & master branches
-          const branch = activeRepo.default_branch || 'main';
-          const rawRes = await fetch(`https://raw.githubusercontent.com/baanbhaba/${activeRepo.name}/${branch}/README.md`);
-          if (rawRes.ok) {
-            text = await rawRes.text();
-          } else {
-            const masterRes = await fetch(`https://raw.githubusercontent.com/baanbhaba/${activeRepo.name}/master/README.md`);
-            if (masterRes.ok) {
-              text = await masterRes.text();
-            } else {
-              throw new Error('No README file');
-            }
-          }
-        }
-        
-        // Clean up markdown headers/html to make a clean readable summary preview
-        const cleaned = text
-          .replace(/<!--[\s\S]*?-->/g, '') // strip HTML comments
-          .replace(/<[^>]*>?/gm, '')       // strip HTML tags
-          .replace(/^#+\s+/gm, '')          // strip markdown header hashes
-          .replace(/!\[.*?\]\(.*?\)/g, '')   // strip markdown images
-          .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // strip markdown links
-          .replace(/`{3}[\s\S]*?`{3}/g, '')  // strip codeblocks
-          .replace(/`([^`]+)`/g, '$1')      // strip inline code ticks
-          .replace(/\n\s*\n/g, '\n')        // collapse multiple blank lines
-          .trim();
-
-        setReadmeMap((prev) => ({
-          ...prev,
-          [activeRepo.name]: cleaned || activeRepo.description || 'No detailed README content available.'
-        }));
-      } catch {
-        setReadmeMap((prev) => ({
-          ...prev,
-          [activeRepo.name]: activeRepo.description || 'Linux configuration & developer repository.'
-        }));
-      } finally {
-        setLoadingReadme(false);
-      }
-    };
-
-    fetchReadme();
-  }, [activeRepo?.id, activeRepo?.name]);
+  // Relative time helper
+  const timeAgo = (iso: string) => {
+    const diff = Date.now() - new Date(iso).getTime();
+    const days = Math.floor(diff / 86400000);
+    if (days === 0) return 'today';
+    if (days === 1) return 'yesterday';
+    if (days < 7) return `${days}d ago`;
+    if (days < 30) return `${Math.floor(days / 7)}w ago`;
+    if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+    return `${Math.floor(days / 365)}y ago`;
+  };
 
   return (
     <div className="bg-card-about border-2 border-black rounded-2xl p-4 md:p-6 shadow-solid-dark text-on-surface">
@@ -300,43 +260,48 @@ export default function ProjectsPortfolio() {
           })}
         </div>
 
-        {/* Right Detail & Live README Inspector (7 cols) */}
+        {/* Right Detail Panel (7 cols) */}
         {activeRepo && (
           <div className="lg:col-span-7 bg-surface border-2 border-black rounded-xl p-4 flex flex-col justify-between shadow-solid-rose">
-            <div>
+            <div className="flex flex-col gap-3">
               {/* Repo Title & Direct Link */}
-              <div className="flex items-start justify-between gap-2 mb-3 pb-2 border-b border-black/10">
+              <div className="flex items-start justify-between gap-2 pb-3 border-b border-black/10">
                 <div className="flex items-center gap-2">
                   <FolderGit2 className="w-5 h-5 text-terracotta shrink-0" />
                   <h3 className="font-mono font-bold text-base text-on-surface">
                     {activeRepo.name}
                   </h3>
                 </div>
-
                 <a
                   href={activeRepo.html_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1 bg-saffron hover:bg-turmeric text-black px-2.5 py-1 rounded-lg border border-black font-mono font-bold text-xs transition-colors shadow-sm"
+                  className="inline-flex items-center gap-1 bg-saffron hover:bg-turmeric text-black px-2.5 py-1 rounded-lg border border-black font-mono font-bold text-xs transition-colors shadow-sm shrink-0"
                 >
-                  <span>View Repository</span>
+                  <span>View Repo</span>
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
 
-              {/* README Summary Header */}
-              <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-dusty-rose mb-2">
-                <FileText className="w-3.5 h-3.5 text-deep-rose" />
-                <span>README SUMMARY</span>
-                {loadingReadme && <Loader2 className="w-3 h-3 animate-spin text-saffron ml-1" />}
-              </div>
+              {/* Description */}
+              <p className="font-sans text-sm text-on-surface font-medium leading-relaxed">
+                {activeRepo.description || REPO_DESCRIPTIONS[activeRepo.name] || <span className="text-on-surface/40 italic">no description set.</span>}
+              </p>
 
-              {/* Live README Content Summary */}
-              <div className="bg-black/30 border border-black/10 rounded-lg p-3 max-h-36 overflow-y-auto">
-                <p className="font-sans text-xs text-on-surface/90 leading-relaxed whitespace-pre-wrap">
-                  {readmeMap[activeRepo.name] || (loadingReadme ? 'Fetching repository README...' : (activeRepo.description || 'No detailed README summary found.'))}
-                </p>
-              </div>
+              {/* Topics */}
+              {activeRepo.topics && activeRepo.topics.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {activeRepo.topics.map((topic) => (
+                    <span
+                      key={topic}
+                      className="inline-flex items-center gap-1 px-2 py-0.5 bg-deep-rose/10 text-deep-rose border border-deep-rose/20 rounded-full font-mono text-[10px] font-bold"
+                    >
+                      <Tag className="w-2.5 h-2.5" />
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Bottom Meta Bar */}
@@ -357,6 +322,10 @@ export default function ProjectsPortfolio() {
               </div>
 
               <div className="flex items-center gap-4 text-dusty-rose text-xs font-bold">
+                <span className="flex items-center gap-1 text-on-surface/50">
+                  <Clock className="w-3 h-3" />
+                  {timeAgo(activeRepo.updated_at)}
+                </span>
                 <span className="flex items-center gap-1 text-saffron">
                   <Star className="w-3.5 h-3.5 fill-current" />
                   {activeRepo.stargazers_count}
