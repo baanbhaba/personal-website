@@ -8,7 +8,7 @@ interface PixelCatSpriteProps {
 }
 
 export default function PixelCatSprite({ mouseX, mouseY }: PixelCatSpriteProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const catPosRef = useRef({ x: 100, y: 100 });
   const [facingLeft, setFacingLeft] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
