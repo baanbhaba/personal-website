@@ -304,8 +304,8 @@ SUPER + Drag Mouse   -> Move/Resize Window`;
             
             <div className="flex flex-wrap gap-2.5">
               {[
-                { name: 'Fedora Linux', color: 'bg-saffron text-on-surface hover:rotate-2' },
-                { name: 'Linux Customization', color: 'bg-terracotta text-white hover:-rotate-1' },
+                { name: 'Linux', color: 'bg-saffron text-on-surface hover:rotate-2' },
+                { name: 'Security', color: 'bg-terracotta text-white hover:-rotate-1' },
                 { name: 'Music', color: 'bg-deep-rose text-white hover:rotate-1' },
                 { name: 'Creative Coding', color: 'bg-turmeric text-on-surface hover:-rotate-2' },
               ].map((item, i) => (

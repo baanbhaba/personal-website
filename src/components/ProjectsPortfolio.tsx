@@ -24,13 +24,13 @@ export interface GithubRepo {
 const FALLBACK_REPOS: GithubRepo[] = [
   {
     id: 1,
-    name: 'project-alchemi',
-    description: 'Experimental web application & creative alchemy project',
-    html_url: 'https://github.com/baanbhaba/project-alchemi',
+    name: 'dotfiles',
+    description: 'Modular multi-theme Hyprland & Wayland desktop environment (Charcoal, Jaipur, ColorBlock), Neovim, Waybar, Kitty, Rofi, Zsh & custom scripts',
+    html_url: 'https://github.com/baanbhaba/dotfiles',
     stargazers_count: 0,
     forks_count: 0,
-    language: 'TypeScript',
-    updated_at: '2026-08-13T12:25:16Z',
+    language: 'Shell',
+    updated_at: '2026-08-21T10:45:00Z',
     default_branch: 'main',
     fork: false
   },
@@ -42,55 +42,19 @@ const FALLBACK_REPOS: GithubRepo[] = [
     stargazers_count: 0,
     forks_count: 0,
     language: 'TypeScript',
-    updated_at: '2026-08-02T11:23:56Z',
+    updated_at: '2026-08-19T10:22:06Z',
     default_branch: 'main',
     fork: false
   },
   {
     id: 3,
-    name: 'linux-config',
-    description: 'My custom Linux rice dotfiles and system setup',
-    html_url: 'https://github.com/baanbhaba/linux-config',
+    name: 'project-alchemi',
+    description: 'Experimental web application & creative alchemy project',
+    html_url: 'https://github.com/baanbhaba/project-alchemi',
     stargazers_count: 0,
     forks_count: 0,
-    language: 'Shell',
-    updated_at: '2026-07-28T06:21:22Z',
-    default_branch: 'main',
-    fork: false
-  },
-  {
-    id: 4,
-    name: 'waybar-config',
-    description: 'Minimalist and aesthetic Waybar layout & styling',
-    html_url: 'https://github.com/baanbhaba/waybar-config',
-    stargazers_count: 0,
-    forks_count: 0,
-    language: 'CSS',
-    updated_at: '2026-07-10T17:59:19Z',
-    default_branch: 'main',
-    fork: false
-  },
-  {
-    id: 5,
-    name: 'kitty-config',
-    description: 'Kitty terminal emulator config files and color themes',
-    html_url: 'https://github.com/baanbhaba/kitty-config',
-    stargazers_count: 0,
-    forks_count: 0,
-    language: 'Shell',
-    updated_at: '2026-07-10T17:59:26Z',
-    default_branch: 'main',
-    fork: false
-  },
-  {
-    id: 6,
-    name: 'rofi',
-    description: 'Rofi application launcher configuration and themes',
-    html_url: 'https://github.com/baanbhaba/rofi',
-    stargazers_count: 0,
-    forks_count: 0,
-    language: 'Shell',
-    updated_at: '2026-07-10T17:59:09Z',
+    language: 'TypeScript',
+    updated_at: '2026-08-19T06:26:26Z',
     default_branch: 'main',
     fork: false
   }
@@ -98,12 +62,9 @@ const FALLBACK_REPOS: GithubRepo[] = [
 
 // Curated fallback descriptions — used when GitHub API returns null
 const REPO_DESCRIPTIONS: Record<string, string> = {
+  'dotfiles':          'My complete Linux desktop setup in one unified repo. Features a 3-theme switching engine (Charcoal, Jaipur, ColorBlock), Hyprland, Waybar, Neovim (Lua), Kitty, Rofi, Mako, Btop, and custom desktop workflow scripts.',
   'personal-website':  'My personal corner of the internet. Built with React 18, Tailwind CSS, and Framer Motion. Retro-modern aesthetic, Linux-inspired, and constantly evolving.',
   'project-alchemi':   'An experimental web application project — a creative sandbox for trying out new ideas, UI patterns, and front-end concepts before they go anywhere serious.',
-  'linux-config':      'My full Linux setup in one repo. Covers Hyprland, Waybar, Mako, and everything in between. The dotfiles that make my desktop actually feel like mine.',
-  'waybar-config':     'Custom Waybar configuration for my Hyprland setup. Clean modules, warm color palette, and just enough info without cluttering the bar.',
-  'kitty-config':      'Config files for the Kitty terminal emulator. Custom fonts, color schemes, keybindings, and tweaks that make the terminal feel fast and look good.',
-  'rofi':              'Rofi application launcher theme and config. Minimal, keyboard-driven, and styled to match the rest of my Linux rice without getting in the way.',
 };
 
 const CATEGORY_DOTS: Record<string, string> = {
